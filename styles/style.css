@@ -1013,3 +1013,284 @@ footer {
     border-top: 1px solid var(--border);
   }
 }
+/* --------------------------------------------------------------------------
+   Resume page - career ladder and three-column summary cards
+   -------------------------------------------------------------------------- */
+.resume-experience-section {
+  padding: 64px 0 52px;
+  background: var(--page-alt);
+}
+
+.resume-section-heading {
+  margin-bottom: 46px;
+  text-align: center;
+}
+
+.resume-section-heading h2 {
+  color: var(--ink);
+  font-size: clamp(30px, 2.5vw, 42px);
+  line-height: 1.2;
+}
+
+.resume-heading-rule {
+  margin: 12px auto 18px;
+}
+
+.career-ladder {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 4px 0 12px;
+}
+
+.career-ladder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: linear-gradient(to bottom, var(--teal), var(--teal-dark));
+  box-shadow: 0 0 0 6px rgba(115, 216, 211, 0.09);
+}
+
+.career-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 84px minmax(0, 1fr);
+  align-items: start;
+  min-height: 170px;
+  margin-bottom: 38px;
+}
+
+.career-step:last-child {
+  margin-bottom: 0;
+}
+
+.career-card {
+  position: relative;
+  grid-column: 1;
+  width: min(100%, 520px);
+  justify-self: end;
+  padding: 26px 28px 28px;
+  border: 1px solid rgba(18, 107, 115, 0.12);
+  border-left: 4px solid var(--teal-dark);
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.career-card::after {
+  content: '';
+  position: absolute;
+  top: 43px;
+  right: -42px;
+  width: 42px;
+  height: 2px;
+  background: #9fc4c7;
+}
+
+.career-step:nth-child(even) .career-card {
+  grid-column: 3;
+  justify-self: start;
+  border-left: 1px solid rgba(18, 107, 115, 0.12);
+  border-right: 4px solid var(--teal-dark);
+}
+
+.career-step:nth-child(even) .career-card::after {
+  right: auto;
+  left: -42px;
+}
+
+.career-marker {
+  position: relative;
+  z-index: 2;
+  grid-column: 2;
+  grid-row: 1;
+  width: 52px;
+  height: 52px;
+  margin: 18px auto 0;
+  display: grid;
+  place-items: center;
+  border: 5px solid var(--page-alt);
+  border-radius: 50%;
+  background: var(--navy);
+  box-shadow: 0 0 0 3px var(--teal);
+}
+
+.career-marker span {
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.career-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--teal-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.career-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 23px;
+  line-height: 1.25;
+}
+
+.career-meta {
+  margin: 7px 0 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.career-card > p:last-child {
+  color: #495867;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.resume-details-section {
+  padding: 0 0 72px;
+  background: var(--page-alt);
+}
+
+.resume-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.resume-summary-card {
+  min-width: 0;
+  padding: 30px 28px;
+  border: 1px solid rgba(18, 107, 115, 0.12);
+  border-top: 4px solid var(--teal-dark);
+  border-radius: 22px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.resume-summary-icon {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #123742;
+  color: var(--white);
+  font-size: 23px;
+  box-shadow: 0 6px 18px rgba(18, 55, 66, 0.18);
+}
+
+.resume-summary-card h2 {
+  margin-bottom: 20px;
+  color: var(--teal-dark);
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.resume-summary-card h3 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.resume-summary-card p {
+  color: #495867;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.resume-summary-card p + p {
+  margin-top: 12px;
+}
+
+.resume-skill-list strong {
+  color: var(--ink);
+}
+
+.resume-summary-divider {
+  height: 1px;
+  margin: 20px 0;
+  background: var(--border);
+}
+
+@media (max-width: 1000px) {
+  .resume-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .resume-experience-section {
+    padding-top: 52px;
+  }
+
+  .career-ladder {
+    padding-left: 2px;
+  }
+
+  .career-ladder::before {
+    left: 27px;
+    transform: none;
+  }
+
+  .career-step,
+  .career-step:nth-child(even) {
+    grid-template-columns: 56px minmax(0, 1fr);
+    min-height: 0;
+    margin-bottom: 28px;
+  }
+
+  .career-card,
+  .career-step:nth-child(even) .career-card {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    justify-self: stretch;
+    border: 1px solid rgba(18, 107, 115, 0.12);
+    border-left: 4px solid var(--teal-dark);
+  }
+
+  .career-card::after,
+  .career-step:nth-child(even) .career-card::after {
+    top: 41px;
+    right: auto;
+    left: -29px;
+    width: 29px;
+  }
+
+  .career-marker {
+    grid-column: 1;
+    width: 46px;
+    height: 46px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .career-card {
+    padding: 22px;
+  }
+
+  .career-card h3 {
+    font-size: 20px;
+  }
+
+  .resume-summary-card {
+    padding: 26px 22px;
+  }
+}
