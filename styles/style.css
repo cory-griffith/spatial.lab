@@ -1392,3 +1392,252 @@ footer {
     font-size: 13px;
   }
 }
+/* --------------------------------------------------------------------------
+   Resume page - Career ladder repair
+   Supports markup using:
+   .career-ladder, .career-step, .career-card, .career-marker,
+   .career-label, .career-meta, .career-role, .career-role-previous
+   -------------------------------------------------------------------------- */
+
+.resume-career-section {
+  padding: 64px 0 58px;
+  background: var(--page-alt);
+}
+
+.career-ladder {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 8px 0 12px;
+}
+
+/* Center vertical rail */
+.career-ladder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 5px;
+  margin-left: -2.5px;
+  border-radius: 99px;
+  background: var(--navy-3);
+}
+
+.career-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+  margin: 0 0 34px;
+}
+
+.career-step:last-child {
+  margin-bottom: 0;
+}
+
+/* Odd entries sit on the left */
+.career-step:nth-child(odd) .career-card {
+  grid-column: 1;
+  justify-self: end;
+}
+
+.career-step:nth-child(odd) .career-marker {
+  grid-column: 2;
+}
+
+/* Even entries sit on the right */
+.career-step:nth-child(even) .career-card {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.career-step:nth-child(even) .career-marker {
+  grid-column: 2;
+}
+
+.career-card {
+  position: relative;
+  width: min(100%, 500px);
+  padding: 28px 30px 30px;
+  border-top: 4px solid var(--teal-dark);
+  border-radius: 10px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+/* Small pointer from card toward the center rail */
+.career-step:nth-child(odd) .career-card::after,
+.career-step:nth-child(even) .career-card::after {
+  content: '';
+  position: absolute;
+  top: 30px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+}
+
+.career-step:nth-child(odd) .career-card::after {
+  right: -11px;
+  border-left: 11px solid var(--white);
+}
+
+.career-step:nth-child(even) .career-card::after {
+  left: -11px;
+  border-right: 11px solid var(--white);
+}
+
+.career-marker {
+  position: relative;
+  z-index: 3;
+  grid-row: 1;
+  width: 52px;
+  height: 52px;
+  margin: 18px auto 0;
+  display: grid;
+  place-items: center;
+  border: 4px solid var(--teal-dark);
+  border-radius: 50%;
+  background: var(--page-alt);
+  box-shadow: 0 0 0 6px rgba(115, 216, 211, 0.16);
+  color: var(--teal-dark);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.career-marker span {
+  display: block;
+  line-height: 1;
+}
+
+.career-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--teal-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.career-card h2,
+.career-card h3 {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.career-card h2 {
+  margin-bottom: 18px;
+  font-size: 24px;
+}
+
+.career-card h3 {
+  margin-bottom: 7px;
+  font-size: 22px;
+}
+
+.career-meta {
+  margin: 0 0 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  color: var(--teal-dark) !important;
+  font-size: 13px !important;
+  font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+.career-card > p:not(.career-meta),
+.career-role > p:not(.career-meta) {
+  margin: 0;
+  color: #495867;
+  font-size: 14px;
+  line-height: 1.72;
+}
+
+/* Multiple roles / promotions within one organization card */
+.career-role {
+  margin: 0;
+}
+
+.career-role + .career-role,
+.career-role-previous {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.career-organization {
+  margin: 0 0 22px;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+/* Optional section directly below the ladder */
+.resume-summary-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tablet / mobile: move rail left and stack every job on the right */
+@media (max-width: 760px) {
+  .career-ladder {
+    padding-left: 0;
+  }
+
+  .career-ladder::before {
+    left: 27px;
+    margin-left: 0;
+  }
+
+  .career-step {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    margin-bottom: 28px;
+  }
+
+  .career-step:nth-child(odd) .career-card,
+  .career-step:nth-child(even) .career-card {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .career-step:nth-child(odd) .career-marker,
+  .career-step:nth-child(even) .career-marker {
+    grid-column: 1;
+    grid-row: 1;
+    width: 46px;
+    height: 46px;
+    margin: 18px 0 0 4px;
+  }
+
+  .career-step:nth-child(odd) .career-card::after,
+  .career-step:nth-child(even) .career-card::after {
+    left: -11px;
+    right: auto;
+    border-left: 0;
+    border-right: 11px solid var(--white);
+  }
+}
+
+@media (max-width: 520px) {
+  .career-card {
+    padding: 24px 22px 26px;
+  }
+
+  .career-card h3 {
+    font-size: 20px;
+  }
+
+  .career-meta {
+    gap: 5px;
+  }
+}
