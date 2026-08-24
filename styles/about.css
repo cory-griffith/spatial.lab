@@ -69,14 +69,13 @@
 }
 
 .about-photo-image {
-  overflow: hidden;
+  display: block;
 }
 
 .about-photo-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .about-intro-copy {
