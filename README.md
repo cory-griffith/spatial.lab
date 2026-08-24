@@ -1,4 +1,4 @@
-# Cory Griffith | GIS Portfolio
+# Cory Griffith | **[GIS Portfolio](https://cory-griffith.github.io/spatial.lab/)**
 
 Welcome to my GIS portfolio. This site highlights my professional experience, technical skills, and selected projects in Geographic Information Systems and geospatial technology.
 
@@ -8,7 +8,7 @@ My work focuses on developing practical, purpose-built GIS solutions through spa
 
 - ArcGIS Pro, ArcGIS Enterprise & ArcGIS Online
 - Python & ArcPy
-- SQL, PostgreSQL & SQL Server
+- SQL Server & PostgreSQL
 - Geospatial Database Management
 - Web GIS & REST Services
 - HTML & CSS
