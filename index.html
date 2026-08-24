@@ -11,74 +11,102 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-  <nav>
+  <nav class="site-nav">
     <div class="navbar" id="mynavbar">
-            <a href="index.html" class="active">HOME</a>
-      <a href="about.html">ABOUT ME</a>
-      <a href="resume.html">RESUME</a>
-      <a href="portfolio.html">PORTFOLIO</a>
+      <a class="nav-brand" href="index.html" aria-label="Cory Griffith home">
+        <span class="nav-brand-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+        <span class="nav-brand-copy">
+          <strong>CORY GRIFFITH</strong>
+          <small>GIS ADMINISTRATOR</small>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html" class="active">HOME</a>
+        <a href="about.html">ABOUT ME</a>
+        <a href="resume.html">RESUME</a>
+        <a href="portfolio.html">PORTFOLIO</a>
+      </div>
+
       <a href="javascript:void(0);" class="icon" onclick="myFunction()" aria-label="Open navigation menu">
-        <i class="fa fa-bars"></i>
+        <i class="fa fa-bars" aria-hidden="true"></i>
       </a>
     </div>
   </nav>
 
   <main>
     <section class="hero-section">
-      <div class="site-width homepage">
-        <div class="homepage_container">
-          <div class="homepage_left">
-            <div class="homepage_text_cont">
-              <p class="eyebrow">GIS ADMINISTRATOR</p>
-              <h1>Cory Griffith</h1>
-              <div class="homepage_text">
-                <p>I am a GIS Administrator focused on turning spatial data into practical, purpose-built solutions. I use GIS technologies alongside Python, SQL, HTML, and CSS to automate workflows, manage data, and deliver results tailored to operational and project needs.</p>
-              </div>
-              <div class="hero-actions">
-                <a href="portfolio.html" class="button">Portfolio</a>
-                <a href="about.html" class="button button-secondary">About Me</a>
-              </div>
-            </div>
+      <div class="site-width hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">GIS ADMINISTRATOR</p>
+          <span class="eyebrow-rule" aria-hidden="true"></span>
+          <h1>Cory Griffith</h1>
+          <p class="hero-description">I am a GIS Administrator focused on turning spatial data into practical solutions. I use GIS technologies alongside Python, SQL, HTML, and CSS to streamline workflows, manage data, and deliver results tailored to operational and project needs.</p>
+          <div class="hero-actions">
+            <a href="portfolio.html" class="button button-primary"><i class="fa fa-briefcase" aria-hidden="true"></i> Portfolio</a>
+            <a href="resume.html" class="button button-secondary"><i class="fa fa-file-text-o" aria-hidden="true"></i> View Resume</a>
           </div>
-          <div class="homepage_right">
-            <div class="gis-hero-panel" aria-label="GIS portfolio graphic">
-              <div class="gis-grid-lines"></div>
-              <div class="gis-hero-content">
-                <span>SPATIAL DATA</span>
-                <span>ENTERPRISE GIS</span>
-                <span>AUTOMATION</span>
-                <span>WEB GIS</span>
-              </div>
-            </div>
+        </div>
+
+        <div class="hero-visual" aria-label="GIS portfolio graphic">
+          <div class="map-grid" aria-hidden="true"></div>
+          <i class="fa fa-globe hero-globe" aria-hidden="true"></i>
+          <div class="hero-keywords">
+            <span>SPATIAL DATA</span>
+            <span>ENTERPRISE GIS</span>
+            <span>AUTOMATION</span>
+            <span>WEB GIS</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid_background_col">
-      <div class="site-width profile-summary">
+    <section class="home-about-section">
+      <div class="site-width home-about-grid">
         <div class="headshot-placeholder" role="img" aria-label="Headshot placeholder">
+          <i class="fa fa-user" aria-hidden="true"></i>
           <span>HEADSHOT</span>
           <small>Placeholder</small>
         </div>
-        <div class="profile-summary-copy">
+
+        <div class="home-about-copy">
           <p class="section-kicker">ABOUT ME</p>
-          <h2>GIS focused. Solution driven.</h2>
-          <p>I am a GIS Administrator focused on turning spatial data into practical, purpose-built solutions. I use GIS technologies alongside Python, SQL, HTML, and CSS to automate workflows, manage data, and deliver results tailored to operational and project needs.</p>
-          <div class="button_buffer left-button">
-            <a class="button_blk" href="about.html">More About Me</a>
-          </div>
+          <span class="section-rule" aria-hidden="true"></span>
+          <h2>GIS Professional. Problem Solver. Data Advocate.</h2>
+          <p>I build practical GIS solutions that make spatial data easier to manage, maintain, automate, and use. My work combines enterprise GIS administration, database management, web services, and programming to support dependable day-to-day operations and project outcomes.</p>
+          <a class="button dark-button" href="about.html"><i class="fa fa-user" aria-hidden="true"></i> Learn More About Me</a>
+        </div>
+
+        <div class="capability-grid" aria-label="Primary GIS capabilities">
+          <article class="capability-item">
+            <span class="capability-icon"><i class="fa fa-map-o" aria-hidden="true"></i></span>
+            <h3>SPATIAL ANALYSIS</h3>
+            <p>Turning spatial data into useful information and decisions.</p>
+          </article>
+
+          <article class="capability-item">
+            <span class="capability-icon"><i class="fa fa-database" aria-hidden="true"></i></span>
+            <h3>DATA MANAGEMENT</h3>
+            <p>Building accurate, organized, and reliable GIS datasets.</p>
+          </article>
+
+          <article class="capability-item">
+            <span class="capability-icon"><i class="fa fa-code" aria-hidden="true"></i></span>
+            <h3>AUTOMATION</h3>
+            <p>Streamlining repeatable GIS workflows with code and tools.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="grid_background_col2">
+    <section class="project-areas-section">
       <div class="site-width">
-        <div class="grid_title_txt">
+        <div class="section-heading centered-heading">
           <p class="section-kicker">PORTFOLIO</p>
           <h2>Project Areas</h2>
-          <p class="section-intro">Project case studies will be added in the next phase. The portfolio is prepared around the areas below.</p>
+          <p>Project case studies will be added as the portfolio grows.</p>
         </div>
+
         <div class="focus-card-grid">
           <article class="focus-card">
             <span class="focus-number">01</span>
@@ -96,19 +124,21 @@
             <p>Web maps, REST services, ArcGIS Online and Enterprise solutions, and integrations with external systems.</p>
           </article>
         </div>
-        <div class="button_buffer">
-          <a href="portfolio.html" class="button_blk">View Portfolio</a>
+
+        <div class="section-action">
+          <a href="portfolio.html" class="button outline-dark-button">View Portfolio</a>
         </div>
       </div>
     </section>
   </main>
 
-  <div class="about_me_interests_cont_pg2 contact-section">
-    <div class="about_me_interests_pg2">
+  <section class="contact-section">
+    <div class="site-width contact-inner">
       <h2>Contact</h2>
       <p>Connect with me on LinkedIn or GitHub.</p>
     </div>
-  </div>
+  </section>
+
   <footer>
     <div class="top_footer">
       <p>Contact Me</p>
@@ -119,6 +149,7 @@
       <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
     </div>
   </footer>
+
   <script src="scripts/icon.js"></script>
   <script src="scripts/app.js"></script>
 </body>
