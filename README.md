@@ -1,18 +1,27 @@
-# Cory Griffith GIS Portfolio Base
+# Cory Griffith | GIS Portfolio
 
-This is the personalized first-pass portfolio base prepared for `https://cory-griffith.github.io/`.
+Welcome to my GIS portfolio. This site highlights my professional experience, technical skills, and selected projects in Geographic Information Systems and geospatial technology.
 
-## Included
-- Personalized Home, About, Resume, and Portfolio pages
-- Dark blue + teal visual palette
-- Headshot placeholders with no broken image references
-- Personalized LinkedIn and GitHub links
-- Education, technical skills, and certifications
-- Empty/placeholder project categories ready for real project case studies
-- Sanitized Mapbox configuration with no inherited access token
+My work focuses on developing practical, purpose-built GIS solutions through spatial analysis, database management, web GIS, workflow automation, and programming.
 
-## Next phase
-Replace the placeholder portfolio categories with real project cards and create individual project pages. Add a headshot once the final image is selected. Add full employer/date/accomplishment information to the Resume page when desired.
+## Technical Focus
 
-## Mapbox
-`scripts/config.js` intentionally contains placeholder Mapbox credentials. Use your own public token/style values only if the interactive experience map is added later.
+- ArcGIS Pro, ArcGIS Enterprise & ArcGIS Online
+- Python & ArcPy
+- SQL, PostgreSQL & SQL Server
+- Geospatial Database Management
+- Web GIS & REST Services
+- HTML & CSS
+- GIS Workflow Automation
+
+## Portfolio
+
+View the live portfolio:
+
+**[cory-griffith.github.io/spatial.lab](https://cory-griffith.github.io/spatial.lab/)**
+
+---
+
+**Cory Griffith**  
+GIS Administrator  
+[LinkedIn](https://www.linkedin.com/in/cory-a-griffith)
