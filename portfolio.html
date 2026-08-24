@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Cory Griffith">
+  <meta name="description" content="GIS project portfolio for Cory Griffith, including enterprise GIS, automation, database, web GIS, and integration work.">
+  <title>Cory Griffith | Portfolio</title>
+  <link rel="canonical" href="https://cory-griffith.github.io/portfolio.html">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <nav>
+    <div class="navbar" id="mynavbar">
+            <a href="index.html">HOME</a>
+      <a href="about.html">ABOUT ME</a>
+      <a href="resume.html">RESUME</a>
+      <a href="portfolio.html" class="active">PORTFOLIO</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()" aria-label="Open navigation menu">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="about_me_title">
+      <div class="about_me_text"><h1>PORTFOLIO</h1></div>
+    </section>
+
+    <section class="grid_background_col2">
+      <div class="site-width portfolio-intro">
+        <p class="section-kicker">PROJECT WORK</p>
+        <h2>GIS solutions and technical projects</h2>
+        <p>Individual case studies will be added in the next phase. The portfolio structure is already configured so projects can be filtered by the primary type of work involved.</p>
+      </div>
+
+      <div class="site-width portfolio_cont">
+        <div id="myBtnContainer" class="portfolio-filter">
+          <button class="portbtn portactive" onclick="filterSelection('all')">Show all</button>
+          <button class="portbtn" onclick="filterSelection('enterprise')">Enterprise GIS</button>
+          <button class="portbtn" onclick="filterSelection('automation')">Automation</button>
+          <button class="portbtn" onclick="filterSelection('webgis')">Web GIS</button>
+        </div>
+
+        <div class="portrow">
+          <div class="portcolumn enterprise">
+            <article class="portcontent placeholder-project">
+              <span class="project-status">COMING SOON</span>
+              <h3>Enterprise GIS &amp; Data Management</h3>
+              <p>Space reserved for enterprise GIS administration, database, schema, publishing, or infrastructure case studies.</p>
+            </article>
+          </div>
+          <div class="portcolumn automation">
+            <article class="portcontent placeholder-project">
+              <span class="project-status">COMING SOON</span>
+              <h3>GIS Automation &amp; Scripting</h3>
+              <p>Space reserved for Python, SQL, data transformation, scheduled processing, or workflow automation projects.</p>
+            </article>
+          </div>
+          <div class="portcolumn webgis">
+            <article class="portcontent placeholder-project">
+              <span class="project-status">COMING SOON</span>
+              <h3>Web GIS &amp; System Integrations</h3>
+              <p>Space reserved for web applications, REST services, ArcGIS Online or Enterprise solutions, and external system integrations.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="about_me_interests_cont_pg2 contact-section">
+    <div class="about_me_interests_pg2">
+      <h2>Contact</h2>
+      <p>Connect with me on LinkedIn or GitHub.</p>
+    </div>
+  </div>
+  <footer>
+    <div class="top_footer">
+      <p>Contact Me</p>
+      <a href="https://www.linkedin.com/in/cory-a-griffith" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+      <a href="https://github.com/cory-griffith" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa fa-github"></i></a>
+    </div>
+    <div class="bottom_footer">
+      <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
+    </div>
+  </footer>
+  <script src="scripts/filter.js"></script>
+  <script src="scripts/icon.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
