@@ -1016,16 +1016,18 @@ footer {
     border-top: 1px solid var(--border);
   }
 }
+
 /* --------------------------------------------------------------------------
-   Resume page - career ladder and three-column summary cards
+   Resume page - alternating professional experience timeline
+   Inspired by the structural pattern used on the reference resume page.
    -------------------------------------------------------------------------- */
 .resume-experience-section {
-  padding: 64px 0 52px;
+  padding: 64px 0 58px;
   background: var(--page-alt);
 }
 
 .resume-section-heading {
-  margin-bottom: 46px;
+  margin-bottom: 42px;
   text-align: center;
 }
 
@@ -1039,132 +1041,124 @@ footer {
   margin: 12px auto 18px;
 }
 
-.career-ladder {
+.timeline {
   position: relative;
-  width: min(1180px, 100%);
+  width: min(1200px, 100%);
   margin: 0 auto;
-  padding: 4px 0 12px;
 }
 
-.career-ladder::before {
+/* Center vertical line */
+.timeline::after {
   content: '';
   position: absolute;
+  width: 5px;
+  background: var(--navy-3);
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 3px;
-  transform: translateX(-50%);
+  margin-left: -2.5px;
   border-radius: 99px;
-  background: linear-gradient(to bottom, var(--teal), var(--teal-dark));
-  box-shadow: 0 0 0 6px rgba(115, 216, 211, 0.09);
 }
 
-.career-step {
+.timelinecontainer {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 84px minmax(0, 1fr);
-  align-items: start;
-  min-height: 170px;
-  margin-bottom: 38px;
+  width: 50%;
+  padding: 10px 42px;
 }
 
-.career-step:last-child {
-  margin-bottom: 0;
+/* Timeline node */
+.timelinecontainer::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  right: -15px;
+  top: 30px;
+  z-index: 2;
+  border: 4px solid var(--teal-dark);
+  border-radius: 50%;
+  background: var(--page-alt);
+  box-shadow: 0 0 0 5px rgba(115, 216, 211, 0.14);
 }
 
-.career-card {
+.timelineleft {
+  left: 0;
+}
+
+.timelineright {
+  left: 50%;
+}
+
+.timelineright::after {
+  left: -15px;
+}
+
+/* Card arrows */
+.timelineleft::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid var(--white);
+}
+
+.timelineright::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid var(--white);
+}
+
+.timelinecontent {
   position: relative;
-  grid-column: 1;
-  width: min(100%, 520px);
-  justify-self: end;
-  padding: 26px 28px 28px;
-  border: 1px solid rgba(18, 107, 115, 0.12);
-  border-left: 4px solid var(--teal-dark);
-  border-radius: 18px;
+  padding: 26px 30px 28px;
+  border-top: 4px solid var(--teal-dark);
+  border-radius: 8px;
   background: var(--white);
   box-shadow: var(--shadow);
 }
 
-.career-card::after {
-  content: '';
-  position: absolute;
-  top: 43px;
-  right: -42px;
-  width: 42px;
-  height: 2px;
-  background: #9fc4c7;
-}
-
-.career-step:nth-child(even) .career-card {
-  grid-column: 3;
-  justify-self: start;
-  border-left: 1px solid rgba(18, 107, 115, 0.12);
-  border-right: 4px solid var(--teal-dark);
-}
-
-.career-step:nth-child(even) .career-card::after {
-  right: auto;
-  left: -42px;
-}
-
-.career-marker {
-  position: relative;
-  z-index: 2;
-  grid-column: 2;
-  grid-row: 1;
-  width: 52px;
-  height: 52px;
-  margin: 18px auto 0;
-  display: grid;
-  place-items: center;
-  border: 5px solid var(--page-alt);
-  border-radius: 50%;
-  background: var(--navy);
-  box-shadow: 0 0 0 3px var(--teal);
-}
-
-.career-marker span {
-  color: var(--teal);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
-.career-label {
-  display: inline-block;
-  margin-bottom: 8px;
-  color: var(--teal-dark);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-.career-card h3 {
-  margin: 0;
+.timelinecontent h3 {
+  margin: 0 0 7px;
   color: var(--ink);
   font-size: 23px;
   line-height: 1.25;
 }
 
-.career-meta {
-  margin: 7px 0 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.timelinecontent h4 {
+  margin: 0 0 15px;
   color: var(--teal-dark);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1.5;
 }
 
-.career-card > p:last-child {
+.timelinecontent p {
+  margin: 0;
   color: #495867;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.72;
 }
 
+.timelinecontent .timeline-placeholder {
+  color: #7b8793;
+  font-style: italic;
+}
+
+/* Education / skills / certifications row */
 .resume-details-section {
-  padding: 0 0 72px;
+  padding: 12px 0 72px;
   background: var(--page-alt);
 }
 
@@ -1180,7 +1174,7 @@ footer {
   padding: 30px 28px;
   border: 1px solid rgba(18, 107, 115, 0.12);
   border-top: 4px solid var(--teal-dark);
-  border-radius: 22px;
+  border-radius: 18px;
   background: var(--white);
   box-shadow: var(--shadow);
 }
@@ -1237,63 +1231,164 @@ footer {
   }
 }
 
-@media (max-width: 800px) {
+/* Collapse the alternating timeline into one left-hand rail on smaller screens */
+@media (max-width: 760px) {
   .resume-experience-section {
-    padding-top: 52px;
+    padding-top: 50px;
   }
 
-  .career-ladder {
-    padding-left: 2px;
+  .timeline::after {
+    left: 30px;
+    margin-left: 0;
   }
 
-  .career-ladder::before {
-    left: 27px;
-    transform: none;
-  }
-
-  .career-step,
-  .career-step:nth-child(even) {
-    grid-template-columns: 56px minmax(0, 1fr);
-    min-height: 0;
-    margin-bottom: 28px;
-  }
-
-  .career-card,
-  .career-step:nth-child(even) .career-card {
-    grid-column: 2;
-    grid-row: 1;
+  .timelinecontainer,
+  .timelineleft,
+  .timelineright {
+    left: 0;
     width: 100%;
-    justify-self: stretch;
-    border: 1px solid rgba(18, 107, 115, 0.12);
-    border-left: 4px solid var(--teal-dark);
+    padding-left: 72px;
+    padding-right: 4px;
   }
 
-  .career-card::after,
-  .career-step:nth-child(even) .career-card::after {
-    top: 41px;
+  .timelinecontainer::before,
+  .timelineleft::before,
+  .timelineright::before {
+    left: 62px;
     right: auto;
-    left: -29px;
-    width: 29px;
+    top: 32px;
+    border: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid var(--white);
   }
 
-  .career-marker {
-    grid-column: 1;
-    width: 46px;
-    height: 46px;
-    margin-top: 20px;
+  .timelinecontainer::after,
+  .timelineleft::after,
+  .timelineright::after {
+    left: 16px;
+    right: auto;
   }
 }
 
 @media (max-width: 520px) {
-  .career-card {
+  .timelinecontent {
     padding: 22px;
   }
 
-  .career-card h3 {
+  .timelinecontent h3 {
     font-size: 20px;
   }
 
   .resume-summary-card {
     padding: 26px 22px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Home page - Project Areas carousel
+   Shows 3 cards on desktop, 2 on tablet, and 1 on mobile.
+   -------------------------------------------------------------------------- */
+.focus-carousel {
+  position: relative;
+  width: min(1220px, 100%);
+  margin: 34px auto 0;
+  padding: 0 58px;
+}
+
+.focus-carousel-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.focus-card-track {
+  display: flex;
+  align-items: stretch;
+  gap: 22px;
+  transition: transform 0.42s ease;
+  will-change: transform;
+}
+
+.focus-card-track .focus-card {
+  flex: 0 0 calc((100% - 44px) / 3);
+  min-width: 0;
+  height: auto;
+}
+
+.focus-carousel-button {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(18, 107, 115, 0.20);
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  box-shadow: 0 8px 22px rgba(15, 29, 46, 0.18);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.focus-carousel-button:hover:not(:disabled) {
+  background: var(--teal-dark);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.focus-carousel-button:focus-visible {
+  outline: 3px solid rgba(115, 216, 211, 0.45);
+  outline-offset: 3px;
+}
+
+.focus-carousel-button:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.focus-carousel-button.is-hidden {
+  visibility: hidden;
+}
+
+.focus-carousel-prev {
+  left: 0;
+}
+
+.focus-carousel-next {
+  right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-card-track,
+  .focus-carousel-button {
+    transition: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .focus-carousel {
+    width: min(900px, 100%);
+  }
+
+  .focus-card-track .focus-card {
+    flex-basis: calc((100% - 22px) / 2);
+  }
+}
+
+@media (max-width: 650px) {
+  .focus-carousel {
+    padding: 0 46px;
+  }
+
+  .focus-card-track .focus-card {
+    flex-basis: 100%;
+  }
+
+  .focus-carousel-button {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
   }
 }
