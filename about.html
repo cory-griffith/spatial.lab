@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Cory Griffith">
-  <meta name="description" content="About Cory Griffith, a GIS Administrator working with enterprise GIS, spatial databases, automation, web GIS, and geospatial technology.">
+  <meta name="description" content="About Cory Griffith, a GIS Administrator specializing in enterprise GIS, automation, spatial databases, public safety GIS, web GIS, and geospatial technology.">
   <title>Cory Griffith | About Me</title>
-  <link rel="canonical" href="https://cory-griffith.github.io/about.html">
+  <link rel="canonical" href="https://cory-griffith.github.io/spatial.lab/about.html">
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/about.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+  <!-- Keep this navigation structure identical across every page. -->
   <nav class="site-nav">
     <div class="navbar" id="mynavbar">
       <a class="nav-brand" href="index.html" aria-label="Cory Griffith home">
@@ -34,76 +36,159 @@
     </div>
   </nav>
 
-  <main>
+  <main class="about-page">
     <section class="about_me_title">
-      <div class="about_me_text"><h1>ABOUT ME</h1></div>
+      <div class="about_me_text">
+        <p class="about-page-kicker">BACKGROUND &amp; APPROACH</p>
+        <h1>ABOUT ME</h1>
+      </div>
     </section>
 
-    <section class="grid_background_col2">
-      <div class="site-width profile-summary profile-summary-about">
-        <div class="headshot-placeholder large" role="img" aria-label="Headshot placeholder">
+    <!-- Introduction: the photo floats left so longer text wraps beside it and then continues beneath it. -->
+    <section class="about-intro-section">
+      <div class="site-width about-intro-wrap">
+        <div class="about-photo-slot" role="img" aria-label="Headshot placeholder">
+          <i class="fa fa-user" aria-hidden="true"></i>
           <span>HEADSHOT</span>
-          <small>Placeholder</small>
+          <small>Replace with photo later</small>
         </div>
-        <div class="profile-summary-copy">
-          <p class="section-kicker">CORY GRIFFITH</p>
-          <h2>GIS Administrator</h2>
-          <p>I am a GIS Administrator focused on turning spatial data into practical, purpose-built solutions. I use GIS technologies alongside Python and SQL to automate workflows, manage data, and deliver results tailored to operational and project needs.</p>
-          <p>My professional focus includes enterprise GIS, spatial database management, web services, workflow automation, and building geospatial solutions that are practical to maintain and useful to the people who rely on them.</p>
+
+        <!-- When you have a headshot, replace the div above with something like:
+        <figure class="about-photo-slot about-photo-image">
+          <img src="images/cory-griffith-headshot.jpg" alt="Cory Griffith">
+        </figure>
+        -->
+
+        <div class="about-intro-copy">
+          <p class="section-kicker">GIS ADMINISTRATION &amp; DEVELOPMENT</p>
+          <span class="section-rule" aria-hidden="true"></span>
+          <h2>Building reliable GIS systems, data, and workflows.</h2>
+
+          <p>As GIS Administrator for Warren County, Virginia, I manage and maintain the organization's GIS environment, including its spatial databases, services, applications, and supporting workflows. I have modernized major parts of the environment through database schema updates, workflow automation, database-platform changes, ArcGIS Server upgrades, and the transition from ArcMap-based publishing to ArcGIS Pro and a modern enterprise GIS architecture.</p>
+
+          <p>My work has included leading the GIS portion of integrating local data into a web-based Computer Aided Dispatch environment and developing a complex SQL query to retrieve selected real estate information from the Vision database for integration with parcel data. These projects reflect the type of work I enjoy most: connecting systems, improving repeatability, and building products around a real operational need.</p>
+
+          <p>In December 2022, I graduated from James Madison University with a Bachelor of Science in Geographic Science and concentrations in Environmental Conservation, Sustainability, and Development (ECSD) and Applied Geographic Information Systems (AGIS). While in college, I returned to a previous employer as an unpaid intern, where I assisted the GIS Technician and gained practical, real-world GIS experience. That experience helped position me for a local-government role with the County of Roanoke as a GIS Specialist in Development Services, where my work focused on GIS utility data input and maintenance.</p>
+
+          <p>I enjoy the challenge of producing reliable, reusable products that make other people's work easier. I am especially passionate about maintaining accurate data for the public and for emergency-response agencies. My goal is to continue expanding my programming, automation, and enterprise GIS skills and eventually provide practical GIS solutions to clients seeking more efficient, maintainable, and dependable GIS environments.</p>
         </div>
       </div>
     </section>
 
-    <section class="grid_background_col">
-      <div class="site-width about-details-grid">
-        <article class="detail-card">
-          <h2>Professional Focus</h2>
-          <p>Enterprise GIS | GIS Administration | Spatial Data Management | Database Configuration | Workflow Automation | Web GIS | REST Services</p>
-        </article>
+    <!-- Interests and technical skills -->
+    <section class="about-expertise-section">
+      <div class="site-width">
+        <div class="about-section-heading">
+          <p class="section-kicker">WHAT I WORK WITH</p>
+          <h2>Interests &amp; Technical Skills</h2>
+        </div>
 
-        <article class="detail-card detail-card-wide">
-          <h2>Technical Skills</h2>
-          <div class="skill-grid">
-            <div class="skill-group">
-              <h3>Esri Platform</h3>
-              <p>ArcGIS Pro, ArcMap, ArcGIS Online, ArcGIS Enterprise, Portal for ArcGIS, ArcGIS Hub</p>
+        <div class="about-expertise-grid">
+          <article class="about-info-card">
+            <div class="about-card-icon"><i class="fa fa-compass" aria-hidden="true"></i></div>
+            <h3>Interests</h3>
+            <div class="about-chip-list" aria-label="Professional interests">
+              <span>Address &amp; Road Data Standards</span>
+              <span>Geospatial Analysis</span>
+              <span>Python</span>
+              <span>Web GIS</span>
+              <span>Imagery</span>
             </div>
-            <div class="skill-group">
-              <h3>Development &amp; Automation</h3>
-              <p>Python, SQL, HTML, CSS, REST APIs</p>
-            </div>
-            <div class="skill-group">
-              <h3>Databases &amp; Administration</h3>
-              <p>Microsoft SQL Server, PostgreSQL, Database Configuration</p>
-            </div>
-            <div class="skill-group">
-              <h3>Additional Tools</h3>
-              <p>Microsoft Office Products, GPS Pathfinder Office, SRA, CivicPlus</p>
-            </div>
-          </div>
-        </article>
+          </article>
 
-        <article class="detail-card">
-          <h2>Education</h2>
-          <h3>James Madison University</h3>
-          <p>Bachelor of Science in Geographic Science</p>
-        </article>
+          <article class="about-info-card about-info-card-wide">
+            <div class="about-card-icon"><i class="fa fa-cogs" aria-hidden="true"></i></div>
+            <h3>Technical Skills</h3>
+            <div class="about-skill-groups">
+              <div class="about-skill-group">
+                <h4>GIS &amp; Imagery</h4>
+                <p>ArcGIS Pro, ArcGIS Server, ArcGIS Online, Mapbox, Google Earth Pro, ERDAS IMAGINE</p>
+              </div>
+              <div class="about-skill-group">
+                <h4>Development &amp; Automation</h4>
+                <p>Python, ArcPy, pandas, HTML, CSS</p>
+              </div>
+              <div class="about-skill-group">
+                <h4>Databases</h4>
+                <p>Microsoft SQL Server, SQL Server Management Studio, PostgreSQL, pgAdmin</p>
+              </div>
+              <div class="about-skill-group">
+                <h4>Enterprise &amp; Local Government</h4>
+                <p>CivicPlus, Cityworks, EnerGov, Microsoft 365</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <article class="detail-card">
-          <h2>Certifications &amp; Training</h2>
-          <p><strong>SQL Certification</strong><br>Laurel Ridge Community College — June 2024</p>
-          <p><strong>12 Esri Catalog Certificates</strong></p>
-        </article>
+    <!-- Proven Projects: concise evidence of completed work. -->
+    <section class="proven-projects-section">
+      <div class="site-width">
+        <div class="about-section-heading centered-heading">
+          <p class="section-kicker">SELECTED WORK</p>
+          <h2>Proven Projects</h2>
+          <p>Examples of GIS modernization, automation, integration, and public-facing work I have delivered.</p>
+        </div>
+
+        <div class="proven-project-grid">
+          <article class="proven-project-card">
+            <span class="project-type">ENTERPRISE GIS</span>
+            <h3>ArcMap to ArcGIS Pro &amp; Enterprise Modernization</h3>
+            <p>Upgraded a locality's ArcGIS Server environment from 10.4 to 11.5, deployed a full in-house enterprise GIS build, transitioned publishing workflows from ArcMap to ArcGIS Pro, and migrated the enterprise database platform from Microsoft SQL Server to PostgreSQL.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">NG9-1-1</span>
+            <h3>NG9-1-1 Data Upload Automation</h3>
+            <p>Developed an adaptable Python parsing and transformation workflow that can ingest varied in-house schemas and produce data structured for National Emergency Number Association (NENA) requirements and NG9-1-1 upload workflows such as Intrado EsiNet.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">PUBLIC SAFETY</span>
+            <h3>Computer Aided Dispatch Migration</h3>
+            <p>Developed a Python workflow to extract selected layers from the in-house GIS environment and package them in the format required by GIS-driven Computer Aided Dispatch software, simplifying repeatable data delivery to the dispatching system.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">SQL &amp; INTEGRATION</span>
+            <h3>Real Estate SQL Integration</h3>
+            <p>Developed a complex SQL query to retrieve selected real estate attributes from a locality database and join them to parcel features through a shared key field. The query is designed so requested fields can be added or removed as requirements change.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">WEB GIS</span>
+            <h3>Cloud-Hosted Parcel Viewer</h3>
+            <p>Built a public parcel viewer with ArcGIS Experience Builder in ArcGIS Online and developed a Python-assisted weekly update workflow to accommodate network and infrastructure constraints. The application operates at fewer than 130 ArcGIS Online credits per month.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">PYTHON AUTOMATION</span>
+            <h3>Official Zoning Map Book</h3>
+            <p>Developed a Python workflow to refresh more than 300 ArcGIS Pro projects, access their active layouts, export the required map pages, and support generation of an official locality zoning map book.</p>
+          </article>
+
+          <article class="proven-project-card">
+            <span class="project-type">PUBLIC ACCESS</span>
+            <h3>ArcGIS Hub Implementation</h3>
+            <p>Developed an ArcGIS Hub and ArcGIS Online landing experience, incorporating HTML and CSS to give the public a clearer and more accessible entry point to locality GIS applications, maps, and resources.</p>
+          </article>
+        </div>
+
+        <div class="about-project-action">
+          <a href="portfolio.html" class="button dark-button"><i class="fa fa-briefcase" aria-hidden="true"></i> View Portfolio</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <div class="about_me_interests_cont_pg2 contact-section">
-    <div class="about_me_interests_pg2">
+  <section class="contact-section">
+    <div class="site-width contact-inner">
       <h2>Contact</h2>
       <p>Connect with me on LinkedIn or GitHub.</p>
     </div>
-  </div>
+  </section>
+
   <footer>
     <div class="top_footer">
       <p>Contact Me</p>
@@ -114,6 +199,7 @@
       <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
     </div>
   </footer>
+
   <script src="scripts/icon.js"></script>
   <script src="scripts/app.js"></script>
 </body>
