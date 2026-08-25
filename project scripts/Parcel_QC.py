@@ -11,9 +11,9 @@ import datetime
 arcpy.env.overwriteOutput = True
 
 # Inputs
-sde_parcels = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Parcel_Details\wcva_dev.dbo.Parcels"
+sde_parcels = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Parcel_Details\wcva_dev.dbo.Parcels"
 
-out_gdb = r"P:\Arcdata\ArcMap\APRX\APRX.gdb"
+out_gdb = r"X\Arcdata\ArcMap\APRX\APRX.gdb"
 out_dataset = "CriticalDataQC"
 
 temp_name = "temp_parcels_qc"

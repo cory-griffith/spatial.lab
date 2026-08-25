@@ -17,11 +17,11 @@ arcpy.env.overwriteOutput = True
 # INPUTS
 # ---------------------------------------------------------------------------
 
-sde_parcels = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Parcel_Details\wcva_dev.dbo.Parcels"
+sde_parcels = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Parcel_Details\wcva_dev.dbo.Parcels"
 
-sde_vision = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Vision"
+sde_vision = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Vision"
 
-out_gdb = r"P:\Arcdata\ArcMap\APRX\APRX.gdb"
+out_gdb = r"X\Arcdata\ArcMap\APRX\APRX.gdb"
 out_dataset = "CriticalDataQC"
 
 temp_name = "temp_parcels_vision_qc"
