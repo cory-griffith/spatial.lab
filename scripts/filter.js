@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const validFilters = [
     "all",
+    "datamanagement",
     "enterprise",
     "scripting",
     "webgis",
