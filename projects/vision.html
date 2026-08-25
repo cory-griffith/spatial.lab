@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Cory Griffith">
+  <meta name="description" content="Project: migrating from real estate's CAMRA system to VISION.">
+  <title>PROJECT TITLE | Cory Griffith</title>
+  <link rel="canonical" href="https://cory-griffith.github.io/spatial.lab/projects/vision.html">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/project.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="project-page">
+  <nav class="site-nav">
+    <div class="navbar" id="mynavbar">
+      <a class="nav-brand" href="../index.html" aria-label="Cory Griffith home">
+        <span class="nav-brand-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+        <span class="nav-brand-copy">
+          <strong>CORY GRIFFITH</strong>
+          <small>GIS</small>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="../index.html">HOME</a>
+        <a href="../about.html">ABOUT ME</a>
+        <a href="../resume.html">RESUME</a>
+        <a href="../portfolio.html" class="active">PORTFOLIO</a>
+      </div>
+
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()" aria-label="Open navigation menu">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-hero">
+      <div class="project-hero-inner">
+        <a class="project-back-link" href="../portfolio.html#portfolio-projects">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Portfolio
+        </a>
+
+        <span class="project-type">PROJECT / SQL</span>
+        <h1>Vision Real Estate &amp; Parcel Integration</h1>
+        <p class="project-lead">Developed a complex SQL query to retrieve current real estate information directly from the Vision database and associate it with the locality’s parcel GIS data. This integration provides GIS users with ac
+          cess to up-to-date property information while maintaining the parcel layer as the spatial foundation.</p>
+
+        <div class="project-tags">
+          <span class="project-tag">SQL</span>
+          <span class="project-tag">Vision</span>
+          <span class="project-tag">Joins</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-main">
+      <div class="project-content">
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">PROJECT OVERVIEW</p>
+            <h2>Why this was necessary</h2>
+          </div>
+          <p>This integration was necessary following the Real Estate Department’s migration from the legacy CAMRA system to Vision. A new 
+            SQL query was developed to retrieve the relevant property information from Vision and align it with the existing fields associated with the locality’s parcel data.</p>
+          <p>Without this integration, the parcel layer would contain geometry but lack much of the descriptive real estate information users 
+            rely on. The query restores that connection, allowing users to access current property information directly through the GIS parcel layer.</p>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">WORKFLOW</p>
+            <h2>How it works</h2>
+          </div>
+          <ol class="project-step-list">
+            <li>
+              <strong>Review the Vision data structure.</strong><br>
+              Review the available Vision field documentation to understand how real estate information is stored and identify the attributes needed for GIS integration.
+            </li>
+
+            <li>
+              <strong>Evaluate existing database views.</strong><br>
+              Review the established SQL Server views to better understand existing table relationships, available fields, and how information is organized across the Real Estate database.
+            </li>
+
+            <li>
+              <strong>Develop and test the SQL query.</strong><br>
+              Query the necessary databases and progressively build the required dataset. Through iterative testing, refine joins, fields, and conditions until the results accurately represent the desired real estate information.
+            </li>
+
+            <li>
+              <strong>Establish the parcel relationship.</strong><br>
+              Identify a common key field between the Vision records and the authoritative parcel feature class, allowing the resulting real estate information to be reliably joined to its corresponding parcel geometry.
+            </li>
+
+            <li>
+              <strong>Implement the production workflow.</strong><br>
+              Finalize the query and establish a repeatable workflow that maintains the connection between current Vision records and GIS parcel data, providing users with access to up-to-date property information.
+            </li>
+          </ol>
+
+          <div class="project-note">
+            <strong>Design note:</strong>Utilize the vendor for questions as much as possible, as they have a better understanding of the database structure.
+          </div>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">SOURCE QUERY</p>
+            <h2>SQL Snippet</h2>
+          </div>
+
+          <div class="project-code-toolbar">
+            <strong>vision_ssms.sql</strong>
+          </div>
+
+<pre class="project-code"><code>USE ROViews_VA
+GO
+
+SELECT
+    -- REAL_PROP_REALMAST fields
+    rpr.REM_PID AS MRECNO,
+    rpr.REM_GIS_ID AS GIS_ID,
+    LTRIM(RTRIM(rpr.REM_ALT_PRCL_ID)) AS MMAP,
+    rpr.REM_LEGAL_AREA AS [MACRE#],
+    rpr.REM_PARCEL_STATUS AS PARSTAT,
+    rpr.REM_USRFLD_DESC AS MMAGCD,
+
+    NULLIF(
+        NULLIF(
+            LTRIM(RTRIM(
+                CASE
+                    WHEN sh.book_clean LIKE 'WF%'
+                         AND sh.page_clean IS NOT NULL
+                    THEN
+                        'WF-'
+                        + RIGHT(sh.book_clean, 2)
+                        + REPLICATE(
+                            '0',
+                            CASE
+                                WHEN LEN(sh.page_clean) >= 5 THEN 0
+                                ELSE 5 - LEN(sh.page_clean)
+                            END
+                        )
+                        + sh.page_clean
+                    ELSE rps.SLH_USER3
+                END
+            )),
+            ''
+        ),
+        '0'
+    ) AS MWPAGE,
+
+    FORMAT(rps.SLH_SALE_DATE, 'MM/dd/yyyy') AS SALEDATE,
+
+COALESCE(cdm.CNS_STORIES, cdu.CNS_STORIES, com.CNS_STORIES, res.CNS_STORIES) AS [MSTOR#],
+COALESCE(res.CNS_USRFLD_81_DESC, com.CNS_USRFLD_203_DESC) AS MGART,
+COALESCE(res.CNS_USRFLD_106_DESC, com.CNS_USRFLD_106_DESC) AS MGART2,
+
+FROM WarrencountyVA10124.REAL_PROP_REALMAST rpr
+
+LEFT JOIN WarrencountyVA10124.REAL_PROP_ADDRESS rpa
+    ON rpr.REM_PID = rpa.ADR_PID
+
+LEFT JOIN WarrencountyVA10124.REAL_PROP_CONSTRCDM cdm
+    ON rpb.BLD_PID = cdm.CNS_PID
+   AND rpb.BLD_BID = cdm.CNS_BID
+
+WHERE rpr.REM_PARCEL_STATUS = 'A'
+  AND rps.SLH_CURRENT_OWNER = 1
+  AND rpl.LND_LINE_NUM = 1
+  AND rpl.LND_BLDG_NUM = 1
+
+ORDER BY rpr.REM_PID ASC;</code></pre>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">RESULT</p>
+            <h2>Outcome and next steps</h2>
+          </div>
+          <p>The above is only a snippet, the full query pulls over 40+ fields. Also, you have to ensure you have proper data dictionaries established in the database or field mapping script as one typo from the real estate department can leave fields blank.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="top_footer">
+      <p>Contact Me</p>
+      <a href="https://www.linkedin.com/in/cory-a-griffith" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+      <a href="https://github.com/cory-griffith" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa fa-github"></i></a>
+    </div>
+    <div class="bottom_footer">
+      <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
+    </div>
+  </footer>
+
+  <script src="../scripts/icon.js"></script>
+  <script src="../scripts/app.js"></script>
+</body>
+</html>
