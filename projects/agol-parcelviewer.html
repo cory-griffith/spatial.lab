@@ -63,7 +63,7 @@
             <p class="section-kicker">PROJECT OVERVIEW</p>
             <h2>Why this was necessary</h2>
           </div>
-          <p>Due to IT security requirements and limited GIS infrastructure, hosting a public-facing parcel viewer internally was not practical. I developed a cloud-hosted solution using ArcGIS Online, eliminating reliance on a third-party vendor while providing a more cost-effective approach.</p>
+          <p>Due to IT security requirements and limited GIS infrastructure, hosting a public-facing parcel viewer internally was not practical. I developed a cloud-hosted solution using ArcGIS Online, eliminating reliance on a third-party consultant to host/manage, while providing a more cost-effective approach.</p>
           <p>Bringing the application under GIS management gives the organization greater control over its public-facing data and allows updates to be published more quickly. This provides the public with a more current, reliable, and maintainable GIS resource.</p>
         </article>
 
@@ -96,18 +96,18 @@
 
 <pre class="project-code"><code>#AGOL_RegUpdates.py
 # --- SDE sources ---
-fr_zoning_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Town\wcva_prod.dbo.FR_Zoning"
-e911roads_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Street_Network\wcva_prod.dbo.e911roads"
-e911address_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911address"
-e911driveway_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911driveway"
-parcels_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.Parcels"
-school_districts_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Schools\wcva_prod.dbo.School_Districts"
+fr_zoning_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Town\wcva_prod.dbo.FR_Zoning"
+e911roads_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Street_Network\wcva_prod.dbo.e911roads"
+e911address_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911address"
+e911driveway_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911driveway"
+parcels_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.Parcels"
+school_districts_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Schools\wcva_prod.dbo.School_Districts"
 
-zoning_split_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning_Split"
-zoning_sde = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning"
+zoning_split_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning_Split"
+zoning_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning"
 
 #AGOL_DeisnerUpdates.py
-WARREN_SDE = r"\\WCG-FS1\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde"
+WARREN_SDE = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde"
 LAYER_NAMES = [
     "Railroad",
     "Airport_Overlay",
@@ -141,7 +141,7 @@ LAYER_NAMES = [
     "Sanitary_Districts",
     "Contours"
 ]
-# Remember to replace &lt; with &amp;lt; and &gt; with &amp;gt; when needed in code.</code></pre>
+</code></pre>
         </article>
 
         <article class="project-section">
