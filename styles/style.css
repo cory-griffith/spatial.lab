@@ -538,6 +538,30 @@ nav,
   box-shadow: var(--shadow);
 }
 
+/* Make Home project-area cards clickable */
+
+.focus-card-track .focus-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.focus-card-track .focus-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(15, 29, 46, 0.16);
+  border-top-color: var(--teal);
+}
+
+.focus-card-track .focus-card:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 4px;
+}
+
 .focus-number {
   color: var(--teal-dark);
   font-size: 13px;

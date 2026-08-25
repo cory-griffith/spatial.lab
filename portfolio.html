@@ -45,15 +45,42 @@
         <h2>GIS solutions and technical projects</h2>
       </div>
 
-      <div class="site-width portfolio_cont">
-        <div id="myBtnContainer" class="portfolio-filter">
-          <button class="portbtn portactive" onclick="filterSelection('all')">Show all</button>
-          <button class="portbtn" onclick="filterSelection('enterprise')">Enterprise GIS</button>
-          <button class="portbtn" onclick="filterSelection('scripting')">Scripting</button>
-          <button class="portbtn" onclick="filterSelection('webgis')">Web GIS</button>
-          <button class="portbtn" onclick="filterSelection('maps')">Static Maps</button>
+      <div class="site-width portfolio_cont"
+            id="portfolio-projects">
 
-        </div>
+          <div id="myBtnContainer" class="portfolio-filter">
+
+            <button class="portbtn portactive"
+                    data-filter="all"
+                    onclick="filterSelection('all')">
+              Show all
+            </button>
+
+            <button class="portbtn"
+                    data-filter="enterprise"
+                    onclick="filterSelection('enterprise')">
+              Enterprise GIS
+            </button>
+
+            <button class="portbtn"
+                    data-filter="scripting"
+                    onclick="filterSelection('scripting')">
+              Scripting
+            </button>
+
+            <button class="portbtn"
+                    data-filter="webgis"
+                    onclick="filterSelection('webgis')">
+              Web GIS
+            </button>
+
+            <button class="portbtn"
+                    data-filter="maps"
+                    onclick="filterSelection('maps')">
+              Static Maps
+            </button>
+
+          </div>
 
         <div class="portrow">
           <div class="portcolumn enterprise">

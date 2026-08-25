@@ -40,3 +40,50 @@ if (btnContainer) {
     });
   }
 }
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  const requestedFilter = params.get("filter");
+
+  const validFilters = [
+    "all",
+    "enterprise",
+    "scripting",
+    "webgis",
+    "maps"
+  ];
+
+  let selectedFilter = "all";
+
+  if (
+    requestedFilter &&
+    validFilters.includes(requestedFilter)
+  ) {
+    selectedFilter = requestedFilter;
+  }
+
+
+  /* Apply requested portfolio filter */
+  filterSelection(selectedFilter);
+
+
+  /* Update active filter button */
+
+  const buttons =
+    document.querySelectorAll("#myBtnContainer .portbtn");
+
+  buttons.forEach(function (button) {
+
+    if (
+      button.dataset.filter === selectedFilter
+    ) {
+      button.classList.add("portactive");
+    }
+    else {
+      button.classList.remove("portactive");
+    }
+
+  });
+
+});
