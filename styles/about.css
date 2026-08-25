@@ -415,7 +415,7 @@ a.proven-project-card:focus-visible {
   text-align: center;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
 
   .pdf-embed-container {
     height: 580px;
@@ -429,7 +429,7 @@ a.proven-project-card:focus-visible {
 
 }
 
-@media (max-width: 520px) {
+@media (max-width: 950px) {
 
   .pdf-embed-container {
     height: 450px;
