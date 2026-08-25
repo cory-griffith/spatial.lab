@@ -353,3 +353,46 @@
     font-size: 12px;
   }
 }
+.excel-preview {
+  margin-top: 24px;
+  overflow-x: auto;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+}
+
+.excel-preview-table {
+  width: 100%;
+  min-width: 760px;
+
+  border-collapse: collapse;
+
+  font-size: 13px;
+}
+
+.excel-preview-table th,
+.excel-preview-table td {
+  padding: 12px 14px;
+
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+
+  text-align: left;
+}
+
+.excel-preview-table th {
+  background: var(--navy);
+  color: var(--white);
+
+  font-weight: 700;
+}
+
+.excel-preview-table tbody tr:nth-child(even) {
+  background: var(--page-alt);
+}
+
+.excel-preview-table td:last-child,
+.excel-preview-table th:last-child {
+  border-right: 0;
+}
