@@ -353,9 +353,10 @@ a.proven-project-card:focus-visible {
    ========================================================================== */
 
 .static-map-gallery {
-  width: 100%;
+  width: calc(100% - 40px);
   max-width: none;
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
   gap: 55px;
 }
@@ -392,7 +393,7 @@ a.proven-project-card:focus-visible {
 
 .pdf-embed-container {
   width: 100%;
-  height: 2500px;
+  height: 850px;
 
   margin: 0;
 
