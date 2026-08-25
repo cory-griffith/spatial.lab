@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Cory Griffith">
+  <meta name="description" content="Project: adapating local data to NENA guidelines for emergency response.">
+  <title>PROJECT TITLE | Cory Griffith</title>
+  <link rel="canonical" href="https://cory-griffith.github.io/spatial.lab/projects/esinet.html">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/project.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="project-page">
+  <nav class="site-nav">
+    <div class="navbar" id="mynavbar">
+      <a class="nav-brand" href="../index.html" aria-label="Cory Griffith home">
+        <span class="nav-brand-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+        <span class="nav-brand-copy">
+          <strong>CORY GRIFFITH</strong>
+          <small>GIS</small>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="../index.html">HOME</a>
+        <a href="../about.html">ABOUT ME</a>
+        <a href="../resume.html">RESUME</a>
+        <a href="../portfolio.html" class="active">PORTFOLIO</a>
+      </div>
+
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()" aria-label="Open navigation menu">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="project-hero">
+      <div class="project-hero-inner">
+        <a class="project-back-link" href="../portfolio.html#portfolio-projects">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Portfolio
+        </a>
+
+        <span class="project-type">PROJECT / NG9-1-1</span>
+        <h1>EsiNet Schema Scripting</h1>
+        <p class="project-lead">Developed a Python workflow that parses locally maintained critical GIS data, including address points and road centerlines, and transforms it into schemas that conform to NENA gu
+          idelines used for Intrado EsiNet uploads. The script preserves the locality's existing internal schema while generating new, properly formatted shapefiles for submission.</p>
+
+        <div class="project-tags">
+          <span class="project-tag">NG9-1-1</span>
+          <span class="project-tag">Data Management</span>
+          <span class="project-tag">Emergency Response</span>
+          <span class="project-tag">Critical Data</span>
+          <span class="project-tag">NENA</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-main">
+      <div class="project-content">
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">PROJECT OVERVIEW</p>
+            <h2>Why this was necessary</h2>
+          </div>
+          <p>Preparing these datasets previously required repetitive manual field mapping and formatting to meet NENA requirements. The automated workflow reduces that process to a 
+            few scripted steps launched through BAT files, producing standardized, submission-ready shapefiles consistently and efficiently.</p>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">WORKFLOW</p>
+            <h2>How it works</h2>
+          </div>
+          <ol class="project-step-list">
+            <li>
+              <strong>Maintain accurate local GIS data.</strong><br>
+              Maintain authoritative address point and road centerline data to a high level of accuracy before beginning the conversion process.
+            </li>
+
+            <li>
+              <strong>Review NENA requirements.</strong><br>
+              Review the applicable NENA guidelines for the dataset being processed to identify the required schema, fields, formatting, and attribute requirements.
+            </li>
+
+            <li>
+              <strong>Transform the data.</strong><br>
+              Run the Python field-mapping workflow to translate the locally maintained schema into the required NENA format and generate new shapefiles in a dedicated output location.
+            </li>
+
+            <li>
+              <strong>Package and submit.</strong><br>
+              Package the resulting shapefiles into the required ZIP format and upload the completed datasets to the EsiNet portal for validation and submission.
+            </li>
+          </ol>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">RESULT</p>
+            <h2>Lessons</h2>
+          </div>
+          <p>Uniform formatting of your unit types / numbering system will save you a headache when parsing a large number of addresses.</p>
+        </article>
+
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">RESOURCES</p>
+            <h2>Project files and links</h2>
+          </div>
+
+          <div class="project-resources">
+            <a class="project-resource-button" href="https://www.nena.org/general/custom.asp?page=standards#STA-006" target="_blank" rel="noopener noreferrer">
+              <i class="fa fa-external-link" aria-hidden="true"></i> NENA Data Model Standards
+            </a>
+            <a class="project-resource-button secondary" href="../portfolio.html#portfolio-projects">
+              <i class="fa fa-th-large" aria-hidden="true"></i> Back to Portfolio
+            </a>
+          </div>
+        </article>
+
+        <!-- OPTIONAL: Delete this whole section for projects with no source code. -->
+        <article class="project-section">
+          <div class="project-section-heading">
+            <p class="section-kicker">CODE SNIPPET</p>
+            <h2>Data Dictionary + Created Fields</h2>
+          </div>
+
+          <div class="project-code-toolbar">
+            <strong>NENA_AddPt.py = NENA_RCLs.py</strong>
+          </div>
+
+<pre class="project-code"><code>#NENA_AddPt.py
+# ----------------------------------------------------------------------
+# Dictionaries
+# ----------------------------------------------------------------------
+predir_spell = {
+    "N": "NORTH", "S": "SOUTH", "E": "EAST", "W": "WEST",
+    "NE": "NORTHEAST", "NW": "NORTHWEST",
+    "SE": "SOUTHEAST", "SW": "SOUTHWEST"
+}
+
+posdir_spell = {
+    "WB": "WESTBOUND", "EB": "EASTBOUND",
+    "NB": "NORTHBOUND", "SB": "SOUTHBOUND",
+    "N": "NORTH", "S": "SOUTH", "E": "EAST", "W": "WEST",
+    "NE": "NORTHEAST", "NW": "NORTHWEST",
+    "SE": "SOUTHEAST", "SW": "SOUTHWEST"
+}
+
+suffix_abbrev_map = {
+    "STREET": "ST", "ALLEY": "ALY", "AVENUE": "AVE",
+    "BOULEVARD": "BLVD", "CIRCLE": "CIR", "COURT": "CT",
+    "DRIVE": "DR", "HIGHWAY": "HWY", "LANE": "LN",
+    "TRAIL": "TRL", "PATH": "PATH", "PIKE": "PIKE",
+    "PARKWAY": "PKWY", "PLACE": "PL", "PLAZA": "PLZ",
+    "ROAD": "RD", "SQUARE": "SQ", "LOOP": "LOOP",
+    "WAY": "WAY", "TERRACE": "TER", "RUN": "RUN",
+    "ST": "ST", "ALY": "ALY", "AVE": "AVE", "BLVD": "BLVD",
+    "CIR": "CIR", "CT": "CT", "DR": "DR", "HWY": "HWY",
+    "LN": "LN", "TRL": "TRL", "PKWY": "PKWY", "PL": "PL",
+    "PLZ": "PLZ", "RD": "RD", "SQ": "SQ", "TER": "TER"
+}
+
+suffix_full_map = {
+    "ST": "STREET", "ALY": "ALLEY", "AVE": "AVENUE",
+    "BLVD": "BOULEVARD", "CIR": "CIRCLE", "CT": "COURT",
+    "DR": "DRIVE", "HWY": "HIGHWAY", "LN": "LANE",
+    "TRL": "TRAIL", "PATH": "PATH", "PIKE": "PIKE",
+    "PKWY": "PARKWAY", "PL": "PLACE", "PLZ": "PLAZA",
+    "RD": "ROAD", "SQ": "SQUARE", "LOOP": "LOOP",
+    "WAY": "WAY", "TER": "TERRACE", "RUN": "RUN",
+    "STREET": "STREET", "ALLEY": "ALLEY", "AVENUE": "AVENUE",
+    "BOULEVARD": "BOULEVARD", "CIRCLE": "CIRCLE",
+    "COURT": "COURT", "DRIVE": "DRIVE", "HIGHWAY": "HIGHWAY",
+    "LANE": "LANE", "TRAIL": "TRAIL", "PARKWAY": "PARKWAY",
+    "PLACE": "PLACE", "PLAZA": "PLAZA", "ROAD": "ROAD",
+    "SQUARE": "SQUARE", "TERRACE": "TERRACE"
+}
+
+UNIT_PRETYPES = set(["APT", "BUILDING", "STE", "UNIT", "FLOOR"])
+
+UNIT_CUT_WORDS = set([
+    "APT", "APARTMENT", "BUILDING", "BLDG", "STE", "SUITE",
+    "UNIT", "FLOOR", "FL", "RM", "ROOM", "LOT", "TRLR",
+    "TRAILER", "#", "BSMT", "BASEMENT"
+])
+
+def add_output_fields(out_fc):
+    fields_to_add = [
+        ("DISCRPAGID", "TEXT", 100),
+        ("DATEUPDATE", "DATE", None),
+        ("NGUID", "TEXT", 254),
+        ("COUNTRY", "TEXT", 2),
+        ("A1", "TEXT", 2),
+        ("A2", "TEXT", 254),
+        ("A3", "TEXT", 254),
+        ("ADDNUM_PRE", "TEXT", 15),
+        ("ADD_NUMBER", "LONG", None),
+        ("ADDNUM_SUF", "TEXT", 15),
+        ("ADDNUM_CMP", "TEXT", 42),
+        ("ST_PREDIR", "TEXT", 10),
+        ("ST_NAME", "TEXT", 254),
+        ("ST_POSTYP", "TEXT", 50),
+        ("ST_POSDIR", "TEXT", 20),
+        ("LST_PREDIR", "TEXT", 2),
+        ("LST_NAME", "TEXT", 75),
+        ("LST_TYP", "TEXT", 4),
+        ("LST_POSDIR", "TEXT", 2),
+        ("ESN", "TEXT", 5),
+        ("MSAGCOMM", "TEXT", 40),
+        ("POST_COMM", "TEXT", 40),
+        ("POST_CODE", "TEXT", 7),
+        ("UNIT", "TEXT", 75),
+        ("UNITPRETYP", "TEXT", 75),
+        ("UNITVALUE", "TEXT", 75)
+    ]
+___________________________________________________________________________________________________
+NENA_RCLs.py
+# ----------------------------------------------------------------------
+# Dictionaries
+# ----------------------------------------------------------------------
+directions = ["N", "S", "E", "W", "NE", "NW", "SE", "SW"]
+
+suffix_full_map = {
+    "ST": "STREET",
+    "ALY": "ALLEY",
+    "AVE": "AVENUE",
+    "BLVD": "BOULEVARD",
+    "CIR": "CIRCLE",
+    "CT": "COURT",
+    "DR": "DRIVE",
+    "HWY": "HIGHWAY",
+    "LN": "LANE",
+    "TRL": "TRAIL",
+    "PATH": "PATH",
+    "PIKE": "PIKE",
+    "PKWY": "PARKWAY",
+    "PL": "PLACE",
+    "PLZ": "PLAZA",
+    "RD": "ROAD",
+    "SQ": "SQUARE",
+    "LOOP": "LOOP",
+    "WAY": "WAY",
+    "TER": "TERRACE",
+    "RUN": "RUN"
+}
+
+suffix_full_map.update({
+    "STREET": "STREET",
+    "ALLEY": "ALLEY",
+    "AVENUE": "AVENUE",
+    "BOULEVARD": "BOULEVARD",
+    "CIRCLE": "CIRCLE",
+    "COURT": "COURT",
+    "DRIVE": "DRIVE",
+    "HIGHWAY": "HIGHWAY",
+    "LANE": "LANE",
+    "TRAIL": "TRAIL",
+    "PARKWAY": "PARKWAY",
+    "PLACE": "PLACE",
+    "PLAZA": "PLAZA",
+    "ROAD": "ROAD",
+    "SQUARE": "SQUARE",
+    "TERRACE": "TERRACE"
+})
+
+suffix_abbrev_map = {
+    "STREET": "ST",
+    "ALLEY": "ALY",
+    "AVENUE": "AVE",
+    "BOULEVARD": "BLVD",
+    "CIRCLE": "CIR",
+    "COURT": "CT",
+    "DRIVE": "DR",
+    "HIGHWAY": "HWY",
+    "LANE": "LN",
+    "TRAIL": "TRL",
+    "PATH": "PATH",
+    "PIKE": "PIKE",
+    "PARKWAY": "PKWY",
+    "PLACE": "PL",
+    "PLAZA": "PLZ",
+    "ROAD": "RD",
+    "SQUARE": "SQ",
+    "LOOP": "LOOP",
+    "WAY": "WAY",
+    "TERRACE": "TER",
+    "RUN": "RUN",
+    "ST": "ST",
+    "ALY": "ALY",
+    "AVE": "AVE",
+    "BLVD": "BLVD",
+    "CIR": "CIR",
+    "CT": "CT",
+    "DR": "DR",
+    "HWY": "HWY",
+    "LN": "LN",
+    "TRL": "TRL",
+    "PKWY": "PKWY",
+    "PL": "PL",
+    "PLZ": "PLZ",
+    "RD": "RD",
+    "SQ": "SQ",
+    "TER": "TER"
+}
+
+predir_spell = {
+    "N": "NORTH",
+    "S": "SOUTH",
+    "E": "EAST",
+    "W": "WEST",
+    "NE": "NORTHEAST",
+    "NW": "NORTHWEST",
+    "SE": "SOUTHEAST",
+    "SW": "SOUTHWEST"
+}
+
+posdir_spell = {
+    "N": "NORTH",
+    "S": "SOUTH",
+    "E": "EAST",
+    "W": "WEST",
+    "NE": "NORTHEAST",
+    "NW": "NORTHWEST",
+    "SE": "SOUTHEAST",
+    "SW": "SOUTHWEST"
+}
+
+posmod_spell = {
+    "WB": "WESTBOUND",
+    "EB": "EASTBOUND",
+    "NB": "NORTHBOUND",
+    "SB": "SOUTHBOUND"
+}
+
+citycode_map = {
+    "BOY": "BOYCE",
+    "HUM": "HUME",
+    "LUR": "LURAY",
+    "FRO": "FRONT ROYAL",
+    "STC": "STEPHENS CITY",
+    "CHG": "CHESTER GAP",
+    "FLI": "FLINT HILL",
+    "HUN": "HUNTLY",
+    "LIN": "LINDEN",
+    "SPE": "SPERRYVILLE",
+    "DEL": "DELAPLANE",
+    "MRK": "MARKHAM",
+    "RIL": "RILEYVILLE",
+    "STR": "STRASBURG",
+    "FTV": "FORT VALLEY",
+    "MID": "MIDDLETOWN",
+    "BEN": "BENTONVILLE",
+    "WHT": "WHITE POST"
+}
+
+    fields_to_add = [
+        ("DISCRPAGID", "TEXT", 100),
+        ("DATEUPDATE", "DATE", None),
+        ("NGUID", "TEXT", 254),
+        ("FROMADDR_L", "LONG", None),
+        ("TOADDR_L", "LONG", None),
+        ("FROMADDR_R", "LONG", None),
+        ("TOADDR_R", "LONG", None),
+        ("PARITY_L", "TEXT", 1),
+        ("PARTIY_R", "TEXT", 1),
+        ("ST_PREDIR", "TEXT", 10),
+        ("ST_PRETYP", "TEXT", 50),
+        ("ST_NAME", "TEXT", 254),
+        ("ST_POSTYP", "TEXT", 50),
+        ("ST_POSDIR", "TEXT", 10),
+        ("ST_POSMOD", "TEXT", 25),
+        ("LST_PREDIR", "TEXT", 2),
+        ("LST_NAME", "TEXT", 75),
+        ("LST_TYP", "TEXT", 4),
+        ("LST_POSDIR", "TEXT", 2),
+        ("ESN_L", "TEXT", 5),
+        ("ESN_R", "TEXT", 5),
+        ("MSAGCOMM_L", "TEXT", 30),
+        ("MSAGCOMM_R", "TEXT", 30),
+        ("COUNTRY_L", "TEXT", 2),
+        ("COUNTRY_R", "TEXT", 2),
+        ("A1_L", "TEXT", 2),
+        ("A1_R", "TEXT", 2),
+        ("A2_L", "TEXT", 254),
+        ("A2_R", "TEXT", 254),
+        ("A3_L", "TEXT", 254),
+        ("A3_R", "TEXT", 254),
+        ("POSTCODE_L", "TEXT", 7),
+        ("POSTCODE_R", "TEXT", 7),
+        ("POSTCOMM_L", "TEXT", 40),
+        ("POSTCOMM_R", "TEXT", 40),
+        ("ONEWAY", "TEXT", 2),
+        ("EXCEPTION", "TEXT", 7),
+        ("SPEEDLIMIT", "LONG", None),
+        ("FROMLEVEL", "TEXT", 1),
+        ("TOLEVEL", "TEXT", 1)
+    ]</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="top_footer">
+      <p>Contact Me</p>
+      <a href="https://www.linkedin.com/in/cory-a-griffith" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+      <a href="https://github.com/cory-griffith" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa fa-github"></i></a>
+    </div>
+    <div class="bottom_footer">
+      <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
+    </div>
+  </footer>
+
+  <script src="../scripts/icon.js"></script>
+  <script src="../scripts/app.js"></script>
+</body>
+</html>
