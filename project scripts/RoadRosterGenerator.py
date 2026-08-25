@@ -1,7 +1,3 @@
-# Developed by Cory Griffith
-# Run inside ArcGIS Pro
-# Mimics old map book road roster
-
 import arcpy
 import os
 import datetime
@@ -11,8 +7,8 @@ import pandas as pd
 arcpy.env.overwriteOutput = True
 
 # Paths
-sde_conn = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde"
-input_fc = os.path.join(sde_conn, r"wcva_prod.DBO.Street_Network\wcva_prod.DBO.e911roads")
+sde_conn = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\X.sde"
+input_fc = os.path.join(sde_conn, r"X.DBO.Street_Network\X.DBO.e911roads")
 aprx_gdb = r"P:\Arcdata\ArcMap\APRX\APRX.gdb"
 output_fc = os.path.join(aprx_gdb, "MapBookRoadRoster_DISS")
 output_folder = r"P:\Arcdata\Addressing\New Roads\zRoad Rosters"
@@ -97,7 +93,7 @@ if "MILES" in df.columns:
 
 # Create XLSX filename and write to Excel
 today_str = datetime.datetime.today().strftime("%Y%m%d")
-xlsx_filename = "Warren County Road Roster - {0}.xlsx".format(today_str)
+xlsx_filename = "Local Road Roster - {0}.xlsx".format(today_str)
 xlsx_path = os.path.join(output_folder, xlsx_filename)
 
 df.to_excel(xlsx_path, index=False)

@@ -66,18 +66,19 @@
           </div>
           <p>Maintaining an accurate road roster is important for providing a consistent reference of recognized roadways within the locality. Previously, producing or updating this information could require manually reviewing road records, 
             organizing attributes, and formatting the results into a usable document.</p>
+          <p>Automating the process reduces repetitive work, minimizes the potential for transcription or formatting errors, and helps ensure that the published roster remains consistent with the underlying GIS data.</p>
         </article>
 
         <article class="project-section">
           <div class="project-section-heading">
             <p class="section-kicker">WORKFLOW</p>
-            <h2>How it works</h2>
+            <h2>How the script works</h2>
           </div>
           <ol class="project-step-list">
-            <li><strong>Step one.</strong><br>Explain the first major piece of the workflow.</li>
-            <li><strong>Step two.</strong><br>Explain the second major piece of the workflow.</li>
-            <li><strong>Step three.</strong><br>Explain the third major piece of the workflow.</li>
-            <li><strong>Step four.</strong><br>Explain the result or final processing step.</li>
+            <li><strong>Calculate roadway mileage &amp; address ranges.</strong><br>The script adds a mileage field and calculates road length in miles. It also reviews the left- and right-side address ranges from the source data to determine the lowest and highest address values associated with each roadway.</li>
+            <li><strong>Build a tabular road roster.</strong><br>ArcPy cursors read the processed feature class and transfer the resulting attributes into a pandas DataFrame, allowing the GIS-derived information to be organized as a clean tabular dataset.</li>
+            <li><strong>Format &amp; export the final Excel file.</strong><br>Unnecessary fields are removed, mileage values are rounded for readability, and the roster is exported to a date-stamped Excel workbook for distribution and reference.</li>
+            <li><strong>Clean upp temporary GIS data.</strong><br>After the roster is successfully generated, the temporary dissolved feature class and map layer are removed so the workflow does not leave unnecessary processing data behind.</li>
           </ol>
         </article>
 
@@ -85,12 +86,15 @@
         <article class="project-section">
           <div class="project-section-heading">
             <p class="section-kicker">SOURCE CODE</p>
-            <h2>Implementation</h2>
+            <h2>Python Implementation</h2>
           </div>
 
           <div class="project-code-toolbar">
-            <strong>FILE_NAME.py</strong>
-            <a class="project-resource-link" href="GITHUB-SOURCE-URL-HERE" target="_blank" rel="noopener noreferrer">
+            <strong>RoadRosterGenerator.py</strong>
+            <a class="project-resource-link" 
+                href="https://github.com/cory-griffith/spatial.lab/blob/main/project%20scripts/RoadRosterGenerator.py" 
+                target="_blank" 
+                rel="noopener noreferrer">
               <i class="fa fa-github" aria-hidden="true"></i> View source on GitHub
             </a>
           </div>
