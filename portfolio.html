@@ -6,8 +6,9 @@
   <meta name="author" content="Cory Griffith">
   <meta name="description" content="GIS project portfolio for Cory Griffith, including enterprise GIS, automation, database, web GIS, and integration work.">
   <title>Cory Griffith | Portfolio</title>
-  <link rel="canonical" href="https://cory-griffith.github.io/portfolio.html">
+  <link rel="canonical" href="https://cory-griffith.github.io/spatial.lab/portfolio.html">
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/project.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -45,42 +46,14 @@
         <h2>GIS solutions and technical projects</h2>
       </div>
 
-      <div class="site-width portfolio_cont"
-            id="portfolio-projects">
-
-          <div id="myBtnContainer" class="portfolio-filter">
-
-            <button class="portbtn portactive"
-                    data-filter="all"
-                    onclick="filterSelection('all')">
-              Show all
-            </button>
-
-            <button class="portbtn"
-                    data-filter="enterprise"
-                    onclick="filterSelection('enterprise')">
-              Enterprise GIS
-            </button>
-
-            <button class="portbtn"
-                    data-filter="scripting"
-                    onclick="filterSelection('scripting')">
-              Scripting
-            </button>
-
-            <button class="portbtn"
-                    data-filter="webgis"
-                    onclick="filterSelection('webgis')">
-              Web GIS
-            </button>
-
-            <button class="portbtn"
-                    data-filter="maps"
-                    onclick="filterSelection('maps')">
-              Static Maps
-            </button>
-
-          </div>
+      <div class="site-width portfolio_cont" id="portfolio-projects">
+        <div id="myBtnContainer" class="portfolio-filter">
+          <button class="portbtn portactive" data-filter="all" onclick="filterSelection('all')">Show all</button>
+          <button class="portbtn" data-filter="enterprise" onclick="filterSelection('enterprise')">Enterprise GIS</button>
+          <button class="portbtn" data-filter="scripting" onclick="filterSelection('scripting')">Scripting</button>
+          <button class="portbtn" data-filter="webgis" onclick="filterSelection('webgis')">Web GIS</button>
+          <button class="portbtn" data-filter="maps" onclick="filterSelection('maps')">Static Maps</button>
+        </div>
 
         <div class="portrow">
           <div class="portcolumn enterprise">
@@ -90,6 +63,7 @@
               <p>Space reserved for enterprise GIS administration, database, schema, publishing, or infrastructure case studies.</p>
             </article>
           </div>
+
           <div class="portcolumn scripting">
             <article class="portcontent placeholder-project">
               <span class="project-status">COMING SOON</span>
@@ -97,6 +71,7 @@
               <p>Space reserved for Python, SQL, data transformation, scheduled processing, or workflow automation projects.</p>
             </article>
           </div>
+
           <div class="portcolumn webgis">
             <article class="portcontent placeholder-project">
               <span class="project-status">COMING SOON</span>
@@ -104,19 +79,26 @@
               <p>Space reserved for web applications, REST services, ArcGIS Online or Enterprise solutions, and external system integrations.</p>
             </article>
           </div>
+
           <div class="portcolumn maps">
             <article class="portcontent placeholder-project">
               <span class="project-status">COMING SOON</span>
               <h3>Static Maps &amp; Visualizations</h3>
               <p>Space reserved for cartography, map design, and data visualization projects.</p>
             </article>
-        </div>
-        <div class="portcolumn scripting">
-            <article class="portcontent placeholder-project">
-              <span class="project-status">Python</span>
+          </div>
+
+          <!-- Real project: the entire card is clickable. -->
+          <div class="portcolumn scripting">
+            <a class="portcontent placeholder-project project-card-link"
+               href="projects/hydrant-unique-id.html"
+               aria-label="View project: Unique ID for Fire Hydrants">
+              <span class="project-status">PYTHON / ARCPY</span>
               <h3>Unique ID for Fire Hydrants</h3>
-              <p>Utilizing Latitude &amp; Longitude to develop a unique ID that is specific to one feature.</p>
-            </article>
+              <p>Using latitude and longitude values to generate a repeatable, location-derived identifier for individual hydrant features.</p>
+              <span class="project-card-cta">View Project <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -128,6 +110,7 @@
       <p>Connect with me on LinkedIn or GitHub.</p>
     </div>
   </div>
+
   <footer>
     <div class="top_footer">
       <p>Contact Me</p>
@@ -138,6 +121,7 @@
       <p><small>&copy; <span class="current-year">2026</span>, Cory Griffith</small></p>
     </div>
   </footer>
+
   <script src="scripts/filter.js"></script>
   <script src="scripts/icon.js"></script>
   <script src="scripts/app.js"></script>
