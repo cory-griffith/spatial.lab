@@ -107,13 +107,6 @@ import pandas as pd
 # --- Setup ---
 arcpy.env.overwriteOutput = True
 
-# Paths
-sde_conn = r"P:\Arcdata\ArcMap\Scripts\zzDatabase_Connections\X.sde"
-input_fc = os.path.join(sde_conn, r"X.DBO.Street_Network\X.DBO.e911roads")
-aprx_gdb = r"P:\Arcdata\ArcMap\APRX\APRX.gdb"
-output_fc = os.path.join(aprx_gdb, "MapBookRoadRoster_DISS")
-output_folder = r"P:\Arcdata\Addressing\New Roads\zRoad Rosters"
-
 # Temporary layer
 filtered_layer = "e911roads_filtered"
 where_clause = r"""
@@ -246,7 +239,7 @@ print("Excel file saved to:", xlsx_path)
                 <tbody>
 
                   <tr>
-                    <td>Example Road</td>
+                    <td>Example Rd</td>
                     <td>629</td>
                     <td>30</td>
                     <td>6573.6</td>
@@ -256,7 +249,7 @@ print("Excel file saved to:", xlsx_path)
                   </tr>
 
                   <tr>
-                    <td>Sample Lane</td>
+                    <td>Sample Ln</td>
                     <td></td>
                     <td>30</td>
                     <td>2544.96</td>
