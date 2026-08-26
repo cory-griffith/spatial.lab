@@ -68,67 +68,166 @@
           <p>Considering the locality and the variety of information provided to residents, ArcGIS Hub also allows the County to organize GIS content around specific community needs while maintaining consistent branding 
             and navigation. This improves accessibility, simplifies the public user experience, and provides a platform that can expand as additional GIS applications and resources are developed.</p>
         </article>
+          <article class="project-section">
+            <div class="project-section-heading">
+              <p class="section-kicker">HTML / CSS WALKTHROUGH</p>
+              <h2>Customizing the ArcGIS Hub experience</h2>
+            </div>
+            <p class="code-walkthrough-intro">
+              Selected excerpts demonstrate how custom HTML and CSS were used to
+              extend the ArcGIS Hub home page with branded content, responsive
+              resource panels, Calcite components, and custom navigation.
+            </p>
+            <div class="code-walkthrough">
+              <!-- =====================================================
+                  01 - CUSTOM BRANDING
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    ArcGIS Hub — Branded Intro Panel
+                  </div>
+                  <pre class="project-code"><code>.wc-hero {
+              background: #ffffff;
 
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">WORKFLOW</p>
-            <h2>How it works</h2>
-          </div>
-          <ol class="project-step-list">
-            <li><strong>Step one.</strong><br>Explain the first major piece of the workflow.</li>
-            <li><strong>Step two.</strong><br>Explain the second major piece of the workflow.</li>
-            <li><strong>Step three.</strong><br>Explain the third major piece of the workflow.</li>
-            <li><strong>Step four.</strong><br>Explain the result or final processing step.</li>
-          </ol>
-        </article>
+              border-left: 6px solid #f49633;
+              border-right: 6px solid #faed20;
 
-        <!-- OPTIONAL: Delete this whole section for projects with no source code. -->
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">SOURCE CODE</p>
-            <h2>Implementation</h2>
-          </div>
+              border-radius: 10px;
+              padding: 18px;
+          }
 
-          <div class="project-code-toolbar">
-            <strong>FILE_NAME.py</strong>
-            <a class="project-resource-link" href="GITHUB-SOURCE-URL-HERE" target="_blank" rel="noopener noreferrer">
-              <i class="fa fa-github" aria-hidden="true"></i> View source on GitHub
-            </a>
-          </div>
+          .wc-hero h2 {
+              color: #103d4f;
+              font-weight: 700;
+          }</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">01</span>
+                  <h3>Extend the standard Hub branding</h3>
+                  <p>
+                    Custom CSS was used to create a branded introduction area that
+                    better matches the visual identity of the organization while
+                    maintaining the underlying ArcGIS Hub framework.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  02 - RESPONSIVE RESOURCE CARDS
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    ArcGIS Hub — Responsive Resource Layout
+                  </div>
+                  <pre class="project-code"><code>.wc-grid {
+              display: flex;
+              gap: 14px;
+              flex-wrap: wrap;
+          }
 
-<pre class="project-code"><code># Paste a COPY of the code you want visitors to see here.
-# Remember to replace &lt; with &amp;lt; and &gt; with &amp;gt; when needed in code.</code></pre>
-        </article>
+          .wc-tile {
+              flex: 1 1 360px;
+              background: #ffffff;
+              border-radius: 12px;
+          }
 
-        <!-- OPTIONAL MEDIA: use one, two, or more figures/placeholders. -->
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">PROJECT MEDIA</p>
-            <h2>Screenshots and supporting visuals</h2>
-          </div>
+          @media (max-width: 768px) {
+              .wc-tile {
+                  flex-basis: 100%;
+              }
+          }</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">02</span>
+                  <h3>Build responsive information panels</h3>
+                  <p>
+                    Flexbox and responsive breakpoints allow resource cards to sit
+                    side-by-side on larger displays and automatically reorganize
+                    into a single-column layout on smaller screens.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  03 - CALCITE COMPONENTS
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    ArcGIS Hub — Calcite Action Components
+                  </div>
+                  <pre class="project-code"><code>&lt;div class="wc-actions"&gt;
 
-          <div class="project-media-grid">
-            <div class="project-media-placeholder">OPTIONAL IMAGE / SCREENSHOT 01</div>
-            <div class="project-media-placeholder">OPTIONAL IMAGE / SCREENSHOT 02</div>
-          </div>
+            &lt;calcite-button
+                href="..."
+                appearance="solid"
+                kind="brand"
+                scale="m"&gt;
 
-          <!-- Replace a placeholder with:
-          <figure class="project-media-item">
-            <img src="../images/projects/PROJECT-FOLDER/image.jpg" alt="Useful description">
-            <figcaption>What the image demonstrates.</figcaption>
-          </figure>
-          -->
-        </article>
+                Warren OneView
 
-        <!-- OPTIONAL: results, lessons learned, enhancements, limitations, etc. -->
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">RESULT</p>
-            <h2>Outcome and next steps</h2>
-          </div>
-          <p>Describe what improved, what was delivered, measurable results if available, and any future enhancements.</p>
-        </article>
+            &lt;/calcite-button&gt;
 
+          &lt;/div&gt;</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">03</span>
+                  <h3>Integrate ArcGIS Calcite components</h3>
+                  <p>
+                    Native Calcite components were incorporated into the custom
+                    layout to provide consistent interactive controls while linking
+                    users directly to important GIS applications and public resources.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  04 - CUSTOM NAVIGATION
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    ArcGIS Hub — Custom Navigation
+                  </div>
+                  <pre class="project-code"><code>&lt;div class="wc-dropdown"&gt;
+
+            &lt;span class="wc-dropbtn"&gt;
+              Community Resources
+            &lt;/span&gt;
+
+            &lt;div class="wc-dropdown-panel"&gt;
+
+              &lt;a href="..."&gt;
+                Elections Dashboard
+              &lt;/a&gt;
+
+              &lt;a href="..."&gt;
+                FEMA Flood Mapping
+              &lt;/a&gt;
+
+            &lt;/div&gt;
+
+          &lt;/div&gt;</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">04</span>
+                  <h3>Create a more useful navigation system</h3>
+                  <p>
+                    A custom header and dropdown navigation structure were developed
+                    to organize GIS applications, community resources, neighboring
+                    GIS websites, and other commonly used mapping resources into a
+                    more accessible interface.
+                  </p>
+                </div>
+              </section>
+            </div>
+            <p class="code-walkthrough-intro" style="margin-top: 28px;">
+              <strong>Additional implementation:</strong>
+              The complete Hub design includes additional CSS, organizational
+              branding, social-media links, responsive behavior, resource links,
+              dropdown styling, and other interface components that are intentionally
+              not reproduced in full on this portfolio page.
+            </p>
+          </article>
         <article class="project-section">
           <div class="project-section-heading">
             <p class="section-kicker">RESOURCES</p>
