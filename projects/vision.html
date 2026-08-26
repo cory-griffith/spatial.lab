@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Cory Griffith">
   <meta name="description" content="Project: migrating from real estate's CAMRA system to VISION.">
-  <title>PROJECT TITLE | Cory Griffith</title>
+  <title>Vision - SQL | Cory Griffith</title>
   <link rel="canonical" href="https://cory-griffith.github.io/spatial.lab/projects/vision.html">
   <link rel="stylesheet" href="../styles/style.css">
   <link rel="stylesheet" href="../styles/project.css">
@@ -107,75 +107,182 @@
         </article>
 
         <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">SOURCE QUERY</p>
-            <h2>SQL Snippet</h2>
-          </div>
+            <div class="project-section-heading">
+              <p class="section-kicker">SQL WALKTHROUGH</p>
+              <h2>How the Vision real estate integration works</h2>
+            </div>
+            <p class="code-walkthrough-intro">
+              The full production query contains additional joins, fields, and
+              transformation logic. The excerpts below highlight several of the
+              key techniques used to translate live Vision real estate information
+              into a structure that can be associated with the GIS parcel dataset.
+            </p>
+            <div class="code-walkthrough">
+              <!-- =====================================================
+                  01 - FIELD TRANSLATION
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    vision_ssms.sql — Translate Source Fields
+                  </div>
+                  <pre class="project-code"><code>SELECT
+              rpr.REM_PID AS MRECNO,
+              rpr.REM_GIS_ID AS GIS_ID,
 
-          <div class="project-code-toolbar">
-            <strong>vision_ssms.sql</strong>
-          </div>
+              LTRIM(
+                  RTRIM(rpr.REM_ALT_PRCL_ID)
+              ) AS MMAP,
 
-<pre class="project-code"><code>USE ROViews_VA
-GO
+              rpr.REM_LEGAL_AREA AS [MACRE#],
+              rpr.REM_PARCEL_STATUS AS PARSTAT</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">01</span>
+                  <h3>Translate Vision into the existing GIS structure</h3>
+                  <p>
+                    Vision uses a different field structure than the previous real
+                    estate system and the existing GIS parcel workflow. Selected
+                    source fields are renamed and cleaned within SQL so the resulting
+                    dataset aligns with the field names and information already
+                    expected by downstream GIS processes.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  02 - RELATIONAL JOINS
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    vision_ssms.sql — Connect Related Records
+                  </div>
+                  <pre class="project-code"><code>FROM REAL_PROP_REALMAST rpr
 
-SELECT
-    -- REAL_PROP_REALMAST fields
-    rpr.REM_PID AS MRECNO,
-    rpr.REM_GIS_ID AS GIS_ID,
-    LTRIM(RTRIM(rpr.REM_ALT_PRCL_ID)) AS MMAP,
-    rpr.REM_LEGAL_AREA AS [MACRE#],
-    rpr.REM_PARCEL_STATUS AS PARSTAT,
-    rpr.REM_USRFLD_DESC AS MMAGCD,
+          LEFT JOIN REAL_PROP_ADDRESS rpa
+              ON rpr.REM_PID = rpa.ADR_PID
 
-    NULLIF(
-        NULLIF(
-            LTRIM(RTRIM(
-                CASE
-                    WHEN sh.book_clean LIKE 'WF%'
-                         AND sh.page_clean IS NOT NULL
-                    THEN
-                        'WF-'
-                        + RIGHT(sh.book_clean, 2)
-                        + REPLICATE(
-                            '0',
-                            CASE
-                                WHEN LEN(sh.page_clean) >= 5 THEN 0
-                                ELSE 5 - LEN(sh.page_clean)
-                            END
-                        )
-                        + sh.page_clean
-                    ELSE rps.SLH_USER3
-                END
-            )),
-            ''
-        ),
-        '0'
-    ) AS MWPAGE,
+          LEFT JOIN REAL_PROP_PARCEL rpp
+              ON rpr.REM_PID = rpp.PRC_PID
 
-    FORMAT(rps.SLH_SALE_DATE, 'MM/dd/yyyy') AS SALEDATE,
+          LEFT JOIN REAL_PROP_LAND rpl
+              ON rpr.REM_PID = rpl.LND_PID</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">02</span>
+                  <h3>Combine information from multiple tables</h3>
+                  <p>
+                    The required property information does not exist in a single
+                    Vision table. SQL joins connect the master property record with
+                    related address, parcel, land, ownership, sale, and building
+                    information using their established relational keys.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  03 - SALE HISTORY CLEANUP
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    vision_ssms.sql — Clean Sale History Values
+                  </div>
+                  <pre class="project-code"><code>NULLIF(
+              LTRIM(
+                  RTRIM(
+                      CASE
+                          WHEN sh.book_clean LIKE 'WF%'
+                              THEN NULL
+                          ELSE sh.book_clean
+                      END
+                  )
+              ),
+              ''
+          ) AS MINTYR</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">03</span>
+                  <h3>Normalize inconsistent property records</h3>
+                  <p>
+                    Some real estate values require conditional processing before
+                    they are useful to GIS. CASE, NULLIF, and string-cleaning
+                    functions are used to evaluate source values, remove unwanted
+                    placeholders, and return consistent results for the parcel
+                    dataset.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  04 - COALESCE
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    vision_ssms.sql — Consolidate Building Information
+                  </div>
+                  <pre class="project-code"><code>COALESCE(
+              cdm.CNS_STORIES,
+              cdu.CNS_STORIES,
+              com.CNS_STORIES,
+              res.CNS_STORIES
+          ) AS [MSTOR#]
 
-COALESCE(cdm.CNS_STORIES, cdu.CNS_STORIES, com.CNS_STORIES, res.CNS_STORIES) AS [MSTOR#],
-COALESCE(res.CNS_USRFLD_81_DESC, com.CNS_USRFLD_203_DESC) AS MGART,
-COALESCE(res.CNS_USRFLD_106_DESC, com.CNS_USRFLD_106_DESC) AS MGART2,
+          COALESCE(
+              res.CNS_FOUNDATION_DESC,
+              cdm.CNS_FOUNDATION_DESC,
+              com.CNS_USRFLD_210_DESC
+          ) AS MFOUND</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">04</span>
+                  <h3>Consolidate multiple property types</h3>
+                  <p>
+                    Building characteristics can be stored in different source
+                    tables depending on the type of property being evaluated.
+                    COALESCE allows the query to check multiple potential sources
+                    and return the first available value into one consistent GIS
+                    field.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  05 - FINAL RECORD FILTER
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    vision_ssms.sql — Limit the Final Dataset
+                  </div>
+                  <pre class="project-code"><code>WHERE
+              rpr.REM_PARCEL_STATUS = 'A'
 
-FROM WarrencountyVA10124.REAL_PROP_REALMAST rpr
+              AND rps.SLH_CURRENT_OWNER = 1
 
-LEFT JOIN WarrencountyVA10124.REAL_PROP_ADDRESS rpa
-    ON rpr.REM_PID = rpa.ADR_PID
+              AND rpl.LND_LINE_NUM = 1
 
-LEFT JOIN WarrencountyVA10124.REAL_PROP_CONSTRCDM cdm
-    ON rpb.BLD_PID = cdm.CNS_PID
-   AND rpb.BLD_BID = cdm.CNS_BID
+              AND rpl.LND_BLDG_NUM = 1</code></pre>
 
-WHERE rpr.REM_PARCEL_STATUS = 'A'
-  AND rps.SLH_CURRENT_OWNER = 1
-  AND rpl.LND_LINE_NUM = 1
-  AND rpl.LND_BLDG_NUM = 1
-
-ORDER BY rpr.REM_PID ASC;</code></pre>
-        </article>
-
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">05</span>
+                  <h3>Return the appropriate property records</h3>
+                  <p>
+                    The final query applies business rules to prevent unnecessary
+                    or duplicate records from entering the GIS workflow. The result
+                    is limited to the property, ownership, land, and building
+                    records required for the parcel integration.
+                  </p>
+                </div>
+              </section>
+            </div>
+            <p class="code-walkthrough-intro" style="margin-top: 28px;">
+              <strong>Production query:</strong>
+              The complete SQL implementation contains additional field mappings,
+              joins, sale-history logic, ownership information, building attributes,
+              and supporting records that are intentionally not reproduced on this
+              portfolio page.
+            </p>
+          </article>
         <article class="project-section">
           <div class="project-section-heading">
             <p class="section-kicker">RESULT</p>
