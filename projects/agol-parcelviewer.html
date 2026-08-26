@@ -102,65 +102,250 @@
         </article>
 
         <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">CODE SNIPPET</p>
-            <h2>Layers included in GDBs</h2>
+            <div class="project-section-heading">
+              <p class="section-kicker">CODE WALKTHROUGH</p>
+              <h2>How the ArcGIS Online update workflow works</h2>
+            </div>
+            <p class="code-walkthrough-intro">
+              Two Python workflows prepare the GIS data used by the public parcel viewer.
+              AGOL_RegUpdates builds and processes the primary public-facing datasets,
+              while AGOL_DesignerUpdates packages additional supporting layers used by
+              the application.
+            </p>
+            <div class="code-walkthrough">
+              <!-- =====================================================
+                  AGOL_RegUpdates - 01
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_RegUpdates — Create a Fresh Update Package
+                  </div>
+                  <pre class="project-code"><code>delete_file_if_exists(out_zip)
+          delete_dir_if_exists(out_gdb)
+
+          arcpy.CreateFileGDB_management(
+              OUT_FOLDER,
+              OUT_GDB_NAME
+          )
+
+          arcpy.env.workspace = out_gdb</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">01</span>
+                  <h3>Start with a clean export environment</h3>
+                  <p>
+                    Each update begins by removing the previous output package and
+                    creating a new file geodatabase. This ensures the upload is built
+                    entirely from the latest authoritative GIS data rather than carrying
+                    forward outdated records.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  AGOL_RegUpdates - 02
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_RegUpdates — Extract & Simplify GIS Layers
+                  </div>
+                  <pre class="project-code"><code>arcpy.CopyFeatures_management(
+              e911address_sde,
+              os.path.join(out_gdb, "e911address")
+          )
+
+          arcpy.CopyFeatures_management(
+              e911roads_sde,
+              roads_local
+          )
+
+          dissolve_fields = [
+              "STREET",
+              "ROUTENUM",
+              "CLASS",
+              "SPEED",
+              "ONEWAY"
+          ]
+
+          arcpy.Dissolve_management(
+              roads_local,
+              roads_diss,
+              dissolve_fields
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">02</span>
+                  <h3>Extract and optimize public GIS data</h3>
+                  <p>
+                    Authoritative datasets are copied from the enterprise GIS environment
+                    into the temporary update geodatabase. Certain layers, such as road
+                    centerlines, are simplified through processing so the public-facing
+                    version contains the information needed by the application without
+                    unnecessary complexity.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  AGOL_RegUpdates - 03
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_RegUpdates — Build the Public Parcel Layer
+                  </div>
+                  <pre class="project-code"><code>parcels_key = "TPIN"
+          vision_key = "TPIN"
+
+          arcpy.JoinField_management(
+              parcels_filtered,
+              parcels_key,
+              vision_local,
+              vision_key,
+              vision_fields
+          )
+
+          arcpy.SpatialJoin_analysis(
+              parcels_filtered,
+              school_districts_sde,
+              sj_fc,
+              "JOIN_ONE_TO_ONE",
+              "KEEP_ALL",
+              field_mapping=fms,
+              match_option="HAVE_THEIR_CENTER_IN"
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">03</span>
+                  <h3>Enrich the parcel dataset</h3>
+                  <p>
+                    The parcel layer is enhanced with current real estate information
+                    using a common parcel identifier. A spatial join then adds additional
+                    geographic information, such as school district attribution, before
+                    the final public parcel layer is created.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  AGOL_RegUpdates - 04
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_RegUpdates — Prepare the Final Deliverable
+                  </div>
+                  <pre class="project-code"><code>calculate_maspin_from_tmegid(
+              parcels_final
+          )
+
+          concatenate_owner_names(
+              parcels_final
+          )
+
+          null_blank_fields(
+              parcels_final
+          )
+
+          arcpy.ClearWorkspaceCache_management()
+          arcpy.env.workspace = None
+
+          zip_folder(
+              out_gdb,
+              out_zip
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">04</span>
+                  <h3>Clean and package the update</h3>
+                  <p>
+                    Before delivery, the parcel output is cleaned and standardized for
+                    public use. Temporary information is removed, selected values are
+                    reformatted, workspace locks are released, and the completed file
+                    geodatabase is compressed into a ZIP package ready for the ArcGIS
+                    Online update process.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  AGOL_DesignerUpdates - 05
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_DesignerUpdates — Locate Supporting Layers
+                  </div>
+                  <pre class="project-code"><code>for dirpath, dirnames, filenames in arcpy.da.Walk(
+              sde_workspace,
+              datatype="FeatureClass"
+          ):
+
+              for fc in filenames:
+
+                  tail = normalize_fc_name(fc)
+
+                  if tail in targets and tail not in found:
+                      found[tail] = os.path.join(
+                          dirpath,
+                          fc
+                      )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">05</span>
+                  <h3>Locate supporting GIS layers automatically</h3>
+                  <p>
+                    Rather than relying on a hard-coded path for every individual
+                    feature class, the workflow searches the enterprise geodatabase for
+                    the requested supporting layers. This makes the export process more
+                    adaptable to the organization of the source GIS database.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  AGOL_DesignerUpdates - 06
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    AGOL_DesignerUpdates — Export & Package Designer Layers
+                  </div>
+                  <pre class="project-code"><code>for layer_name in LAYER_NAMES:
+
+              fc_path = fc_map.get(layer_name)
+
+              if not fc_path or not arcpy.Exists(fc_path):
+                  missing.append(layer_name)
+                  continue
+
+              export_to_fgdb(
+                  fc_path,
+                  gdb_path,
+                  layer_name
+              )
+
+              exported.append(layer_name)
+
+          release_arcpy_locks()
+
+          zip_fgdb(
+              gdb_path,
+              zip_base_path
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">06</span>
+                  <h3>Build the supporting-layer package</h3>
+                  <p>
+                    Each requested layer that is found in the enterprise geodatabase is
+                    exported into a dedicated file geodatabase. Missing layers are
+                    tracked without stopping the entire workflow, and the completed
+                    geodatabase is compressed into a ZIP package for the ArcGIS Online
+                    update process.
+                  </p>
+                </div>
+              </section>
+            </div>
           </div>
-
-          <div class="project-code-toolbar">
-            <strong>AGOL_RegUpdates.py + AGOL_DesignerUpdates.py</strong>
-          </div>
-
-<pre class="project-code"><code>#AGOL_RegUpdates.py
-# --- SDE sources ---
-fr_zoning_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Town\wcva_prod.dbo.FR_Zoning"
-e911roads_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Street_Network\wcva_prod.dbo.e911roads"
-e911address_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911address"
-e911driveway_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.e911driveway"
-parcels_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Parcel_Details\wcva_prod.dbo.Parcels"
-school_districts_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Schools\wcva_prod.dbo.School_Districts"
-
-zoning_split_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning_Split"
-zoning_sde = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde\wcva_prod.dbo.Planning_Zoning\wcva_prod.dbo.Zoning"
-________________________________________________________________________________________________________________________________________________________
-#AGOL_DeisnerUpdates.py
-WARREN_SDE = r"\\X\Planning\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_prod.sde"
-LAYER_NAMES = [
-    "Railroad",
-    "Airport_Overlay",
-    "BoatLandings",
-    "Hydrant",
-    "Water_Lines",
-    "Sewers",
-    "WasteDisposal",
-    "Flowline_NHD",
-    "Waterbodies_NHD",
-    "FEMA_Flood",
-    "FEMA_Floodway",
-    "AT_Parking",
-    "AT_Shelters",
-    "AT_Centerline_Project",
-    "FireStations",
-    "Fire_Districts",
-    "LocalGovernment",
-    "Schools",
-    "RecreationalFacilities",
-    "Trailheads",
-    "Admin_Boundary",
-    "Overlay_District_55",
-    "Overlay_District_522",
-    "School_Districts",
-    "Ag_Districts",
-    "Precincts",
-    "ElectionDistricts",
-    "HistoricDistricts",
-    "FR_Ent_Corridor",
-    "Sanitary_Districts",
-    "Contours"
-]
-</code></pre>
-        
-      </div>
+        </article>
     </section>
   </main>
 
