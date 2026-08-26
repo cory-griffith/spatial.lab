@@ -249,6 +249,135 @@
   white-space: pre;
 }
 
+/* ==========================================================================
+   Code Walkthrough
+   ========================================================================== */
+
+.code-walkthrough-intro {
+  max-width: 850px;
+  margin-bottom: 26px;
+}
+
+
+/* Container for all walkthrough examples */
+
+.code-walkthrough {
+  display: grid;
+  gap: 24px;
+}
+
+
+/* One code + explanation row */
+
+.code-walkthrough-item {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.45fr)
+    minmax(280px, 0.75fr);
+
+  overflow: hidden;
+
+  border: 1px solid rgba(18, 107, 115, 0.14);
+  border-radius: 12px;
+
+  background: var(--white);
+}
+
+
+/* Code side */
+
+.code-walkthrough-code {
+  min-width: 0;
+  background: #0b1624;
+}
+
+
+.code-snippet-title {
+  padding: 12px 18px;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.10);
+
+  background: #13263a;
+
+  color: var(--teal-soft);
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+
+/* Override normal code block spacing inside walkthrough */
+
+.code-walkthrough-code .project-code {
+  margin: 0;
+  padding: 22px;
+
+  border-radius: 0;
+
+  background: #0b1624;
+}
+
+
+/* Explanation side */
+
+.code-walkthrough-copy {
+  padding: 28px;
+
+  border-left: 1px solid var(--border);
+
+  background: var(--page-alt);
+}
+
+
+.code-walkthrough-number {
+  display: inline-block;
+
+  margin-bottom: 8px;
+
+  color: var(--teal-dark);
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+
+.code-walkthrough-copy h3 {
+  margin: 0 0 12px;
+
+  color: var(--ink);
+
+  font-size: 19px;
+}
+
+
+.code-walkthrough-copy p {
+  margin: 0;
+
+  color: #495867;
+
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+/* Tablet / mobile */
+
+@media (max-width: 850px) {
+
+  .code-walkthrough-item {
+    grid-template-columns: 1fr;
+  }
+
+  .code-walkthrough-copy {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+}
+
 /* Optional project images/media */
 .project-media-grid {
   display: grid;

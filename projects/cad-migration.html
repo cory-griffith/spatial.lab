@@ -114,105 +114,229 @@
         </article>
 
         <article class="project-section">
+
           <div class="project-section-heading">
-            <p class="section-kicker">CODE SNIPPETS</p>
-            <h2>RCL + AddPt Data Dictionary / Layers in Package</h2>
+            <p class="section-kicker">CODE WALKTHROUGH</p>
+            <h2>How the automation transforms and packages the data</h2>
           </div>
 
-          <div class="project-code-toolbar">
-            <strong>RCL_CADschema.py + AddPt_CADschema.py + FinalExport_CADpkg.py</strong>
+          <p class="code-walkthrough-intro">
+            Selected portions of the Python workflows demonstrate how locally
+            maintained GIS data is standardized to the CAD schema and prepared
+            for transfer.
+          </p>
+
+
+          <div class="code-walkthrough">
+
+
+            <!-- =====================================================
+                CODE EXAMPLE 01
+                ===================================================== -->
+
+            <section class="code-walkthrough-item">
+
+              <div class="code-walkthrough-code">
+
+                <div class="code-snippet-title">
+                  RCL_CADschema.py — Street Standardization
+                </div>
+
+                <pre class="project-code"><code>directions = [
+            "N", "S", "E", "W",
+            "NE", "NW", "SE", "SW",
+            "WB", "SB", "EB", "NB"
+        ]
+
+        street_suffix_map = {
+            "STREET": "ST",
+            "AVENUE": "AVE",
+            "BOULEVARD": "BLVD",
+            "COURT": "CT",
+            "DRIVE": "DR",
+            "HIGHWAY": "HWY",
+            "LANE": "LN",
+            "ROAD": "RD"
+        }
+
+        street_types = set(street_suffix_map.values())</code></pre>
+
+              </div>
+
+
+              <div class="code-walkthrough-copy">
+
+                <span class="code-walkthrough-number">01</span>
+
+                <h3>Standardize road attributes</h3>
+
+                <p>
+                  This portion establishes accepted directional and street-type
+                  values used by the CAD schema. Local road attributes can then
+                  be translated into consistent abbreviations before the final
+                  roadway dataset is produced.
+                </p>
+
+              </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                CODE EXAMPLE 02
+                ===================================================== -->
+
+            <section class="code-walkthrough-item">
+
+              <div class="code-walkthrough-code">
+
+                <div class="code-snippet-title">
+                  RCL_CADschema.py — Required Road Fields
+                </div>
+
+                <pre class="project-code"><code>fields_to_create = [
+            ("LLO", "TEXT", 7),
+            ("LHI", "TEXT", 7),
+            ("RLO", "TEXT", 7),
+            ("RHI", "TEXT", 7),
+            ("FULL_STREET", "TEXT", 50),
+            ("ADDR_PD", "TEXT", 2),
+            ("ADDR_SN", "TEXT", 30),
+            ("ADDR_ST", "TEXT", 7),
+            ("LZIP", "TEXT", 10),
+            ("RZIP", "TEXT", 10),
+            ("ONEWAY", "TEXT", 2),
+            ("SPEED", "DOUBLE"),
+            ("JoinID", "TEXT", 50)
+        ]</code></pre>
+
+              </div>
+
+
+              <div class="code-walkthrough-copy">
+
+                <span class="code-walkthrough-number">02</span>
+
+                <h3>Build the required road schema</h3>
+
+                <p>
+                  The script defines the fields, data types, and lengths required
+                  by the CAD environment. This allows the output feature class to
+                  be created consistently without changing the structure of the
+                  authoritative road centerline data.
+                </p>
+
+              </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                CODE EXAMPLE 03
+                ===================================================== -->
+
+            <section class="code-walkthrough-item">
+
+              <div class="code-walkthrough-code">
+
+                <div class="code-snippet-title">
+                  AddPt_CADschema.py — Address Components
+                </div>
+
+                <pre class="project-code"><code>unit_types = [
+            "UNIT",
+            "STE",
+            "APT",
+            "BLDG",
+            "BUILDING",
+            "BSMT",
+            "FL",
+            "FLOOR"
+        ]
+
+        fields_to_create = [
+            ("FULL_ADDRESS", "TEXT", 60),
+            ("HSNUM", "TEXT", 7),
+            ("ADDR_PD", "TEXT", 2),
+            ("ADDR_SN", "TEXT", 30),
+            ("ADDR_ST", "TEXT", 7),
+            ("UNITTYPE", "TEXT", 10),
+            ("UNITNUMBER", "TEXT", 7),
+            ("CITYCODE", "TEXT", 3),
+            ("ZIP", "TEXT", 10),
+            ("JoinID", "TEXT", 50)
+        ]</code></pre>
+
+              </div>
+
+
+              <div class="code-walkthrough-copy">
+
+                <span class="code-walkthrough-number">03</span>
+
+                <h3>Prepare address-point data</h3>
+
+                <p>
+                  Address points require additional components such as house
+                  numbers, unit types, unit numbers, ZIP codes, and standardized
+                  street attributes. The script creates the required structure so
+                  local address data can be transformed into the format expected
+                  by the CAD system.
+                </p>
+
+              </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                CODE EXAMPLE 04
+                ===================================================== -->
+
+            <section class="code-walkthrough-item">
+
+              <div class="code-walkthrough-code">
+
+                <div class="code-snippet-title">
+                  FinalExport_CADpkg.py — Package Supporting Layers
+                </div>
+
+                <pre class="project-code"><code>layers = [
+            os.path.join(sde_path, "FLEX_Law"),
+            os.path.join(sde_path, "FLEX_CommonPlaces"),
+            os.path.join(sde_path, "FLEX_POI"),
+            os.path.join(sde_path, "Fire_Boxes"),
+            os.path.join(sde_path, "Zip_Codes")
+        ]
+
+        arcpy.env.overwriteOutput = True</code></pre>
+
+              </div>
+
+
+              <div class="code-walkthrough-copy">
+
+                <span class="code-walkthrough-number">04</span>
+
+                <h3>Assemble the transfer package</h3>
+
+                <p>
+                  After the critical road and address datasets are formatted,
+                  the export workflow collects the additional GIS layers required
+                  by the CAD environment and packages them into the deliverable
+                  geodatabase used for transfer.
+                </p>
+
+              </div>
+
+            </section>
+
+
           </div>
 
-<pre class="project-code"><code>#RCL_CADschema.py
-  # --- Paths ---
-input_fc = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Street_Network\wcva_dev.dbo.e911roads"
-append_fc = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.FLEX_System\wcva_dev.dbo.FLEX_e911roads"
-out_gdb = r"X\Arcdata\ArcMap\Users\Cory\04 Motorola Solutions\000_Exports\FLEX_Finaled.gdb"
-out_fc = os.path.join(out_gdb, "FLEX_RCL_Final")
-
-# --- Dictionaries ---
-directions = ["N", "S", "E", "W", "NE", "NW", "SE", "SW", "WB", "SB", "EB", "NB"]
-street_suffix_map = {
-    "STREET": "ST", "ALLEY": "ALY", "AVENUE": "AVE", "BOULEVARD": "BLVD",
-    "CIRCLE": "CIR", "COURT": "CT", "DRIVE": "DR", "HIGHWAY": "HWY",
-    "LANE": "LN", "TRAIL": "TRL", "PATH": "PATH", "PIKE": "PIKE",
-    "PARKWAY": "PKWY", "PLACE": "PL", "PLAZA": "PLZ", "ROAD": "RD",
-    "SQUARE": "SQ", "LOOP": "LOOP", "WAY": "WAY", "TERRACE": "TER", "RUN": "RUN"
-}
-street_types = set(street_suffix_map.values())
-prefix_types = ["INTER"]
-
-# --- Desired Fields ---
-fields_to_create = [
-    ("LLO", "TEXT", 7), ("LHI", "TEXT", 7),
-    ("RLO", "TEXT", 7), ("RHI", "TEXT", 7),
-    ("FULL_STREET", "TEXT", 50),
-    ("ADDR_PD", "TEXT", 2), ("ADDR_PT", "TEXT", 7),
-    ("ADDR_SN", "TEXT", 30), ("ADDR_ST", "TEXT", 7),
-    ("ADDR_SD", "TEXT", 2), ("LCITYCODE", "TEXT", 3),
-    ("RCITYCODE", "TEXT", 3), ("LZIP", "TEXT", 10),
-    ("RZIP", "TEXT", 10), ("STATE", "TEXT", 2),
-    ("FROMELEV", "LONG"), ("TOELEV", "LONG"),
-    ("ONEWAY", "TEXT", 2), ("SPEED", "DOUBLE"),
-    ("JoinID", "TEXT", 50)
-]
-___________________________________________________________________________________________________________________________________
-#AddPt_CADschema.py
-  # --- Paths ---
-input_fc = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.Parcel_Details\wcva_dev.dbo.e911address"
-append_fc = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde\wcva_dev.dbo.FLEX_System\wcva_dev.dbo.FLEX_e911address"
-out_gdb = r"X\Arcdata\ArcMap\Users\Cory\04 Motorola Solutions\000_Exports\FLEX_Finaled.gdb"
-out_fc = os.path.join(out_gdb, "FLEX_AddPt_Final")
-
-# --- Dictionaries ---
-directions = ["N", "S", "E", "W", "NB", "WB", "SB", "EB"]
-street_suffix_map = {
-    "STREET": "ST", "ALLEY": "ALY", "AVENUE": "AVE", "BOULEVARD": "BLVD",
-    "CIRCLE": "CIR", "COURT": "CT", "DRIVE": "DR", "HIGHWAY": "HWY",
-    "LANE": "LN", "TRAIL": "TRL", "PATH": "PATH", "PIKE": "PIKE",
-    "PARKWAY": "PKWY", "PLACE": "PL", "PLAZA": "PLZ", "ROAD": "RD",
-    "SQUARE": "SQ", "LOOP": "LOOP", "WAY": "WAY", "TERRACE": "TER", "RUN": "RUN"
-}
-street_types = set(street_suffix_map.values())
-prefix_types = ["INTER"]
-unit_types = ["UNIT", "STE", "APT", "BLDG", "BUILDING", "BSMT", "FL", "FLOOR"]
-
-# --- Desired Fields ---
-fields_to_create = [
-    ("FULL_ADDRESS", "TEXT", 60),
-    ("HSNUM", "TEXT", 7),
-    ("ADDR_PD", "TEXT", 2),
-    ("ADDR_PT", "TEXT", 7),
-    ("ADDR_SN", "TEXT", 30),
-    ("ADDR_ST", "TEXT", 7),
-    ("ADDR_SD", "TEXT", 2),
-    ("UNITTYPE", "TEXT", 10),
-    ("UNITNUMBER", "TEXT", 7),
-    ("CITYCODE", "TEXT", 3),
-    ("ZIP", "TEXT", 10),
-    ("STATE", "TEXT", 2),
-    ("JoinID", "TEXT", 50)
-]
-___________________________________________________________________________________________________________________________________
-FinalExport_CADpkg.py
-  # --- Paths ---
-sde_path = r"X\Arcdata\ArcMap\Scripts\zzDatabase_Connections\wcva_dev.sde"
-gdb_path = r"X\Arcdata\ArcMap\Users\Cory\04 Motorola Solutions\000_Exports\FLEX_Finaled.gdb"
-export_folder = os.path.dirname(gdb_path)
-join_table = os.path.join(gdb_path, "FLEX_PointAliases")
-
-# --- Layers to export ---
-layers = [
-    os.path.join(sde_path, r"wcva_dev.dbo.FLEX_System\wcva_dev.dbo.FLEX_Law"),
-    os.path.join(sde_path, r"wcva_dev.dbo.FLEX_CommonPlaces"),
-    os.path.join(sde_path, r"wcva_dev.dbo.FLEX_POI"),
-    os.path.join(sde_path, r"wcva_dev.dbo.Public_Safety\wcva_dev.dbo.Fire_Boxes"),
-    os.path.join(sde_path, r"wcva_dev.dbo.Boundary\wcva_dev.dbo.Zip_Codes"),
-]
-
-# --- Overwrite / environment settings ---
-arcpy.env.overwriteOutput = True
-</code></pre>
         </article>
 
         <article class="project-section">
