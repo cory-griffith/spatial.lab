@@ -115,187 +115,239 @@
             <a class="project-resource-button" href="https://www.nena.org/general/custom.asp?page=standards#STA-006" target="_blank" rel="noopener noreferrer">
               <i class="fa fa-external-link" aria-hidden="true"></i> NENA Data Model Standards
             </a>
+            <a class="project-resource-button" href="https://github.com/cory-griffith/spatial.lab/blob/main/pdfs/Data-Report-Cards.pdf" target="_blank" rel="noopener noreferrer">
+              <i class="fa fa-external-link" aria-hidden="true"></i> Data Report Cards
+            </a>
             <a class="project-resource-button secondary" href="../portfolio.html#portfolio-projects">
               <i class="fa fa-th-large" aria-hidden="true"></i> Back to Portfolio
             </a>
           </div>
         </article>
-
-        <!-- OPTIONAL: Delete this whole section for projects with no source code. -->
+        
         <article class="project-section">
           <div class="project-section-heading">
-            <p class="section-kicker">CODE SNIPPET</p>
-            <h2>Data Dictionary + Created Fields</h2>
+            <p class="section-kicker">CODE WALKTHROUGH</p>
+            <h2>How the NENA data conversion workflow works</h2>
           </div>
+          <p class="code-walkthrough-intro">
+            The NENA_AddPt workflow translates locally maintained address-point
+            information into the standardized schema required for NG9-1-1
+            submission. A companion workflow, NENA_RCLs, applies the same general
+            process to authoritative road centerline data.
+          </p>
+          <div class="code-walkthrough">
+            <!-- =====================================================
+                01 - STANDARDIZATION RULES
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  NENA_AddPt — Address Standardization Rules
+                </div>
+                <pre class="project-code"><code>predir_spell = {
+            "N": "NORTH",
+            "S": "SOUTH",
+            "E": "EAST",
+            "W": "WEST",
+            "NE": "NORTHEAST",
+            "NW": "NORTHWEST",
+            "SE": "SOUTHEAST",
+            "SW": "SOUTHWEST"
+        }
 
-          <div class="project-code-toolbar">
-            <strong>NENA_AddPt.py + NENA_RCLs.py</strong>
+        suffix_abbrev_map = {
+            "STREET": "ST",
+            "AVENUE": "AVE",
+            "BOULEVARD": "BLVD",
+            "COURT": "CT",
+            "DRIVE": "DR",
+            "HIGHWAY": "HWY",
+            "LANE": "LN",
+            "ROAD": "RD"
+        }</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">01</span>
+                <h3>Establish standardized address values</h3>
+                <p>
+                  The workflow begins with translation dictionaries for directional
+                  values, street types, and other addressing components. These rules
+                  allow locally maintained attributes to be converted into consistent
+                  values required by the target schema.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                02 - PARSE THE LOCAL ADDRESS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  NENA_AddPt — Parse the Local Address
+                </div>
+                <pre class="project-code"><code>def parse_addnum_from_full_address(full_addr):
+
+            addnum_pre = None
+            addnum_suf = None
+
+            toks = _clean_tokens(full_addr)
+
+            if not toks:
+                return addnum_pre, addnum_suf, []
+
+            first = toks[0]
+            ufirst = first.upper()
+
+            m = re.match(
+                r"^([A-Za-z]+)?[- ]?(\d+)([A-Za-z]+)?$",
+                ufirst
+            )</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">02</span>
+                <h3>Break local addresses into components</h3>
+                <p>
+                  Rather than requiring the locality to completely redesign its
+                  existing address schema, Python parses the maintained full-address
+                  value into individual components such as address number prefixes,
+                  numbers, suffixes, street names, directions, and units.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                03 - BUILD NENA OUTPUT SCHEMA
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  NENA_AddPt — Build the Output Schema
+                </div>
+                <pre class="project-code"><code>fields_to_add = [
+            ("DISCRPAGID", "TEXT", 100),
+            ("DATEUPDATE", "DATE", None),
+            ("NGUID", "TEXT", 254),
+            ("COUNTRY", "TEXT", 2),
+            ("A1", "TEXT", 2),
+            ("A2", "TEXT", 254),
+            ("A3", "TEXT", 254),
+            ("ADDNUM_PRE", "TEXT", 15),
+            ("ADD_NUMBER", "LONG", None),
+            ("ADDNUM_SUF", "TEXT", 15),
+            ("ST_PREDIR", "TEXT", 10),
+            ("ST_NAME", "TEXT", 254),
+            ("ST_POSTYP", "TEXT", 50),
+            ("POST_CODE", "TEXT", 7),
+            ("UNIT", "TEXT", 75)
+        ]</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">03</span>
+                <h3>Create the required output schema</h3>
+                <p>
+                  A new feature class is created specifically for the submission
+                  workflow. The script adds the required fields with controlled
+                  data types and lengths, creating a standardized destination
+                  without altering the authoritative local address-point dataset.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                04 - TRANSFORM RECORDS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  NENA_AddPt — Transform Each Address Record
+                </div>
+                <pre class="project-code"><code>with arcpy.da.SearchCursor(
+            SRC_FC,
+            src_fields
+        ) as sc:
+
+            with arcpy.da.InsertCursor(
+                out_fc,
+                out_fields
+            ) as ic:
+
+                for row in sc:
+
+                    full_addr = row[2]
+                    hsnum = row[3]
+                    unitnumber = row[8]
+
+                    addnum_pre, addnum_suf, street_tokens = \
+                        parse_addnum_from_full_address(full_addr)
+
+                    street = parse_street_tokens(street_tokens)
+
+                    unitpre, unitval = parse_unit(unitnumber)</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">04</span>
+                <h3>Translate local records into NENA fields</h3>
+                <p>
+                  ArcPy reads each authoritative address point, parses the locally
+                  maintained values, and maps the resulting components into the
+                  standardized output fields. This allows the source GIS data to
+                  remain structured for local operational needs while producing a
+                  separate submission-ready dataset.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                05 - FINAL OUTPUT
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  NENA_AddPt — Prepare the Submission Shapefile
+                </div>
+                <pre class="project-code"><code>arcpy.Clip_analysis(
+            out_fc,
+            CLIP_FC,
+            final_fc
+        )
+
+        wgs84 = arcpy.SpatialReference(4326)
+
+        arcpy.Project_management(
+            final_fc,
+            final_fc_tmp,
+            wgs84
+        )
+
+        out_shp = os.path.join(
+            out_day_folder,
+            "AddPt.shp"
+        )
+
+        arcpy.CopyFeatures_management(
+            final_fc_wgs,
+            out_shp
+        )</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">05</span>
+                <h3>Generate the submission-ready shapefile</h3>
+                <p>
+                  After the attributes are transformed, the output is clipped to the
+                  appropriate jurisdictional extent, projected to WGS 84, and exported
+                  as a shapefile into a date-organized upload directory. The resulting
+                  dataset is ready for packaging and submission through the EsiNet
+                  workflow.
+                </p>
+              </div>
+            </section>
           </div>
-
-<pre class="project-code"><code>#NENA_AddPt.py
-# ----------------------------------------------------------------------
-# Dictionaries
-# ----------------------------------------------------------------------
-predir_spell = {
-    "N": "NORTH", "S": "SOUTH", "E": "EAST", "W": "WEST",
-    "NE": "NORTHEAST", "NW": "NORTHWEST",
-    "SE": "SOUTHEAST", "SW": "SOUTHWEST"
-}
-
-posdir_spell = {
-    "WB": "WESTBOUND", "EB": "EASTBOUND",
-    "NB": "NORTHBOUND", "SB": "SOUTHBOUND",
-    "N": "NORTH", "S": "SOUTH", "E": "EAST", "W": "WEST",
-    "NE": "NORTHEAST", "NW": "NORTHWEST",
-    "SE": "SOUTHEAST", "SW": "SOUTHWEST"
-}
-
-suffix_abbrev_map = {
-    "STREET": "ST", "ALLEY": "ALY", "AVENUE": "AVE",
-    "BOULEVARD": "BLVD", "CIRCLE": "CIR", "COURT": "CT",
-    "DRIVE": "DR", "HIGHWAY": "HWY", "LANE": "LN",
-    "TRAIL": "TRL", "PATH": "PATH", "PIKE": "PIKE",
-    "PARKWAY": "PKWY", "PLACE": "PL", "PLAZA": "PLZ",
-    "ROAD": "RD", "SQUARE": "SQ", "LOOP": "LOOP",
-    "WAY": "WAY", "TERRACE": "TER", "RUN": "RUN",
-    "ST": "ST", "ALY": "ALY", "AVE": "AVE", "BLVD": "BLVD",
-    "CIR": "CIR", "CT": "CT", "DR": "DR", "HWY": "HWY",
-    "LN": "LN", "TRL": "TRL", "PKWY": "PKWY", "PL": "PL",
-    "PLZ": "PLZ", "RD": "RD", "SQ": "SQ", "TER": "TER"
-}
-
-suffix_full_map = {
-    "ST": "STREET", "ALY": "ALLEY", "AVE": "AVENUE",
-    "BLVD": "BOULEVARD", "CIR": "CIRCLE", "CT": "COURT",
-    "DR": "DRIVE", "HWY": "HIGHWAY", "LN": "LANE",
-    "TRL": "TRAIL", "PATH": "PATH", "PIKE": "PIKE",
-    "PKWY": "PARKWAY", "PL": "PLACE", "PLZ": "PLAZA",
-    "RD": "ROAD", "SQ": "SQUARE", "LOOP": "LOOP",
-    "WAY": "WAY", "TER": "TERRACE", "RUN": "RUN",
-    "STREET": "STREET", "ALLEY": "ALLEY", "AVENUE": "AVENUE",
-    "BOULEVARD": "BOULEVARD", "CIRCLE": "CIRCLE",
-    "COURT": "COURT", "DRIVE": "DRIVE", "HIGHWAY": "HIGHWAY",
-    "LANE": "LANE", "TRAIL": "TRAIL", "PARKWAY": "PARKWAY",
-    "PLACE": "PLACE", "PLAZA": "PLAZA", "ROAD": "ROAD",
-    "SQUARE": "SQUARE", "TERRACE": "TERRACE"
-}
-
-UNIT_PRETYPES = set(["APT", "BUILDING", "STE", "UNIT", "FLOOR"])
-
-UNIT_CUT_WORDS = set([
-    "APT", "APARTMENT", "BUILDING", "BLDG", "STE", "SUITE",
-    "UNIT", "FLOOR", "FL", "RM", "ROOM", "LOT", "TRLR",
-    "TRAILER", "#", "BSMT", "BASEMENT"
-])
-
-def add_output_fields(out_fc):
-    fields_to_add = [
-        ("DISCRPAGID", "TEXT", 100),
-        ("DATEUPDATE", "DATE", None),
-        ("NGUID", "TEXT", 254),
-        ("COUNTRY", "TEXT", 2),
-        ("A1", "TEXT", 2),
-        ("A2", "TEXT", 254),
-        ("A3", "TEXT", 254),
-        ("ADDNUM_PRE", "TEXT", 15),
-        ("ADD_NUMBER", "LONG", None),
-        ("ADDNUM_SUF", "TEXT", 15),
-        ("ADDNUM_CMP", "TEXT", 42),
-        ("ST_PREDIR", "TEXT", 10),
-        ("ST_NAME", "TEXT", 254),
-        ("ST_POSTYP", "TEXT", 50),
-        ("ST_POSDIR", "TEXT", 20),
-        ("LST_PREDIR", "TEXT", 2),
-        ("LST_NAME", "TEXT", 75),
-        ("LST_TYP", "TEXT", 4),
-        ("LST_POSDIR", "TEXT", 2),
-        ("ESN", "TEXT", 5),
-        ("MSAGCOMM", "TEXT", 40),
-        ("POST_COMM", "TEXT", 40),
-        ("POST_CODE", "TEXT", 7),
-        ("UNIT", "TEXT", 75),
-        ("UNITPRETYP", "TEXT", 75),
-        ("UNITVALUE", "TEXT", 75)
-    ]
-___________________________________________________________________________________________________
-NENA_RCLs.py
-# ----------------------------------------------------------------------
-# Dictionaries
-# ----------------------------------------------------------------------
-directions = ["N", "S", "E", "W", "NE", "NW", "SE", "SW"]
-
-predir_spell = {
-    "N": "NORTH",
-    "S": "SOUTH",
-    "E": "EAST",
-    "W": "WEST",
-    "NE": "NORTHEAST",
-    "NW": "NORTHWEST",
-    "SE": "SOUTHEAST",
-    "SW": "SOUTHWEST"
-}
-
-posdir_spell = {
-    "N": "NORTH",
-    "S": "SOUTH",
-    "E": "EAST",
-    "W": "WEST",
-    "NE": "NORTHEAST",
-    "NW": "NORTHWEST",
-    "SE": "SOUTHEAST",
-    "SW": "SOUTHWEST"
-}
-
-posmod_spell = {
-    "WB": "WESTBOUND",
-    "EB": "EASTBOUND",
-    "NB": "NORTHBOUND",
-    "SB": "SOUTHBOUND"
-}
-
-    fields_to_add = [
-        ("DISCRPAGID", "TEXT", 100),
-        ("DATEUPDATE", "DATE", None),
-        ("NGUID", "TEXT", 254),
-        ("FROMADDR_L", "LONG", None),
-        ("TOADDR_L", "LONG", None),
-        ("FROMADDR_R", "LONG", None),
-        ("TOADDR_R", "LONG", None),
-        ("PARITY_L", "TEXT", 1),
-        ("PARTIY_R", "TEXT", 1),
-        ("ST_PREDIR", "TEXT", 10),
-        ("ST_PRETYP", "TEXT", 50),
-        ("ST_NAME", "TEXT", 254),
-        ("ST_POSTYP", "TEXT", 50),
-        ("ST_POSDIR", "TEXT", 10),
-        ("ST_POSMOD", "TEXT", 25),
-        ("LST_PREDIR", "TEXT", 2),
-        ("LST_NAME", "TEXT", 75),
-        ("LST_TYP", "TEXT", 4),
-        ("LST_POSDIR", "TEXT", 2),
-        ("ESN_L", "TEXT", 5),
-        ("ESN_R", "TEXT", 5),
-        ("MSAGCOMM_L", "TEXT", 30),
-        ("MSAGCOMM_R", "TEXT", 30),
-        ("COUNTRY_L", "TEXT", 2),
-        ("COUNTRY_R", "TEXT", 2),
-        ("A1_L", "TEXT", 2),
-        ("A1_R", "TEXT", 2),
-        ("A2_L", "TEXT", 254),
-        ("A2_R", "TEXT", 254),
-        ("A3_L", "TEXT", 254),
-        ("A3_R", "TEXT", 254),
-        ("POSTCODE_L", "TEXT", 7),
-        ("POSTCODE_R", "TEXT", 7),
-        ("POSTCOMM_L", "TEXT", 40),
-        ("POSTCOMM_R", "TEXT", 40),
-        ("ONEWAY", "TEXT", 2),
-        ("EXCEPTION", "TEXT", 7),
-        ("SPEEDLIMIT", "LONG", None),
-        ("FROMLEVEL", "TEXT", 1),
-        ("TOLEVEL", "TEXT", 1)
-    ]</code></pre>
-        </article>
+          <p class="code-walkthrough-intro" style="margin-top: 28px;">
+            <strong>Companion workflow — NENA_RCLs:</strong>
+            The road-centerline workflow uses the same overall concept but applies it
+            to roadway-specific information, including left and right address ranges,
+            parity, street-name components, postal communities, one-way values,
+            speed limits, and other road attributes before producing the standardized
+            RCL submission dataset.
+          </p>
+        </article>        
       </div>
     </section>
   </main>
