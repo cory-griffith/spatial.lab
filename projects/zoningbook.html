@@ -85,59 +85,158 @@
 
         <article class="project-section">
           <div class="project-section-heading">
-            <p class="section-kicker">SOURCE CODE</p>
-            <h2>Implementation</h2>
+            <p class="section-kicker">CODE WALKTHROUGH</p>
+            <h2>How the Zoning Map Book export workflow works</h2>
           </div>
+          <p class="code-walkthrough-intro">
+            The ArcPy workflow automates the repetitive process of opening multiple
+            ArcGIS Pro projects and exporting their layouts into organized PDF
+            directories. Selected portions of the script demonstrate how the
+            project groups are configured, discovered, and processed.
+          </p>
+          <div class="code-walkthrough">
+            <!-- =====================================================
+                01 - CONFIGURE MAP BOOK GROUPS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  ZoningBookAutoLayout.py — Configure Project Groups
+                </div>
+                <pre class="project-code"><code>paths = [
+            {
+                "source": r"...\APRX Projects\APRX 1-10",
+                "dest": r"...\Maps 1-10"
+            },
+            {
+                "source": r"...\APRX Projects\APRX 11-19",
+                "dest": r"...\Maps 11-19"
+            },
+            {
+                "source": r"...\APRX Projects\APRX 20-29",
+                "dest": r"...\Maps 20-29"
+            }
+        ]</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">01</span>
+                <h3>Organize the Map Book workflow</h3>
+                <p>
+                  The script begins with a collection of source and destination
+                  folder pairs. Each source directory contains a group of ArcGIS Pro
+                  projects, while its corresponding destination identifies where the
+                  finished zoning-map PDFs should be stored.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                02 - PREPARE OUTPUT FOLDERS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  ZoningBookAutoLayout.py — Prepare Output Directories
+                </div>
+                <pre class="project-code"><code>for path_info in paths:
 
-          <div class="project-code-toolbar">
-            <strong>FILE_NAME.py</strong>
-            <a class="project-resource-link" href="GITHUB-SOURCE-URL-HERE" target="_blank" rel="noopener noreferrer">
-              <i class="fa fa-github" aria-hidden="true"></i> View source on GitHub
-            </a>
+            source_folder = path_info["source"]
+            dest_folder = path_info["dest"]
+
+            if not os.path.exists(dest_folder):
+                os.makedirs(dest_folder)</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">02</span>
+                <h3>Prepare each export location</h3>
+                <p>
+                  Each configured project group is processed independently. Before
+                  any layouts are exported, Python verifies that the corresponding
+                  destination directory exists and automatically creates it when
+                  necessary.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                03 - FIND APRX PROJECTS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  ZoningBookAutoLayout.py — Discover ArcGIS Pro Projects
+                </div>
+                <pre class="project-code"><code>for root, dirs, files in os.walk(source_folder):
+
+            for file in files:
+
+                if file.lower().endswith(".aprx"):
+
+                    aprx_path = os.path.join(
+                        root,
+                        file
+                    )
+
+                    aprx = arcpy.mp.ArcGISProject(
+                        aprx_path
+                    )</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">03</span>
+                <h3>Automatically locate each APRX</h3>
+                <p>
+                  Rather than manually opening every zoning-map project, the script
+                  recursively searches each configured directory for ArcGIS Pro
+                  project files. When an APRX is found, ArcPy opens the project so
+                  its layouts can be accessed programmatically.
+                </p>
+              </div>
+            </section>
+            <!-- =====================================================
+                04 - EXPORT LAYOUTS
+                ===================================================== -->
+            <section class="code-walkthrough-item">
+              <div class="code-walkthrough-code">
+                <div class="code-snippet-title">
+                  ZoningBookAutoLayout.py — Export Layouts to PDF
+                </div>
+                <pre class="project-code"><code>for layout in aprx.listLayouts():
+
+            pdf_name = layout.name + ".pdf"
+
+            pdf_path = os.path.join(
+                dest_folder,
+                pdf_name
+            )
+
+            layout.exportToPDF(
+                pdf_path,
+                resolution=300
+            )
+
+        del aprx</code></pre>
+              </div>
+              <div class="code-walkthrough-copy">
+                <span class="code-walkthrough-number">04</span>
+                <h3>Batch export the finished maps</h3>
+                <p>
+                  ArcPy retrieves every layout contained within the project and
+                  automatically names the resulting PDF from the layout name.
+                  Each map is exported at 300 DPI to its assigned folder before
+                  the project is released and processing continues to the next APRX.
+                </p>
+              </div>
+            </section>
           </div>
-
-<pre class="project-code"><code># Paste a COPY of the code you want visitors to see here.
-# Remember to replace &lt; with &amp;lt; and &gt; with &amp;gt; when needed in code.</code></pre>
-        </article>
-
-        <!-- OPTIONAL MEDIA: use one, two, or more figures/placeholders. -->
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">PROJECT MEDIA</p>
-            <h2>Screenshots and supporting visuals</h2>
-          </div>
-
-          <div class="project-media-grid">
-            <div class="project-media-placeholder">OPTIONAL IMAGE / SCREENSHOT 01</div>
-            <div class="project-media-placeholder">OPTIONAL IMAGE / SCREENSHOT 02</div>
-          </div>
-
-          <!-- Replace a placeholder with:
-          <figure class="project-media-item">
-            <img src="../images/projects/PROJECT-FOLDER/image.jpg" alt="Useful description">
-            <figcaption>What the image demonstrates.</figcaption>
-          </figure>
-          -->
-        </article>
-
-        <!-- OPTIONAL: results, lessons learned, enhancements, limitations, etc. -->
-        <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">RESULT</p>
-            <h2>Outcome and next steps</h2>
-          </div>
-          <p>Describe what improved, what was delivered, measurable results if available, and any future enhancements.</p>
         </article>
 
         <article class="project-section">
           <div class="project-section-heading">
             <p class="section-kicker">RESOURCES</p>
-            <h2>Project files and links</h2>
+            <h2>Example Maps</h2>
           </div>
 
           <div class="project-resources">
-            <a class="project-resource-button" href="RESOURCE-URL-HERE" target="_blank" rel="noopener noreferrer">
-              <i class="fa fa-external-link" aria-hidden="true"></i> Primary Resource
+            <a class="project-resource-link" href="https://github.com/cory-griffith/spatial.lab/blob/main/pdfs/Zoning%20Book.pdf" target="_blank" rel="noopener noreferrer">
+              <i class="fa fa-github" aria-hidden="true"></i> View Maps
             </a>
             <a class="project-resource-button secondary" href="../portfolio.html#portfolio-projects">
               <i class="fa fa-th-large" aria-hidden="true"></i> Back to Portfolio
