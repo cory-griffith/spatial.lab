@@ -82,148 +82,217 @@
           </ol>
         </article>
 
-        <!-- OPTIONAL: Delete this whole section for projects with no source code. -->
         <article class="project-section">
-          <div class="project-section-heading">
-            <p class="section-kicker">SOURCE CODE</p>
-            <h2>Python Implementation</h2>
-          </div>
+            <div class="project-section-heading">
+              <p class="section-kicker">CODE WALKTHROUGH</p>
+              <h2>How the Road Roster Generator works</h2>
+            </div>
+            <p class="code-walkthrough-intro">
+              Selected portions of the workflow demonstrate how authoritative road
+              centerlines are filtered, consolidated, analyzed, and converted into
+              a formatted Excel road roster.
+            </p>
+            <div class="code-walkthrough">
+              <!-- =====================================================
+                  CODE EXAMPLE 01
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    RoadRosterGenerator.py — Filter & Consolidate Roads
+                  </div>
+                  <pre class="project-code"><code>filtered_layer = "e911roads_filtered"
 
-          <div class="project-code-toolbar">
-            <strong>RoadRosterGenerator.py</strong>
-            <a class="project-resource-link" 
-                href="https://github.com/cory-griffith/spatial.lab/blob/main/project%20scripts/RoadRosterGenerator.py" 
-                target="_blank" 
-                rel="noopener noreferrer">
-              <i class="fa fa-github" aria-hidden="true"></i> View source on GitHub
-            </a>
-          </div>
+          where_clause = """
+          STREET NOT IN ('UNNAMED ST', 'XOVER')
+          AND CLASS NOT IN (98, 99)
+          """
 
-<pre class="project-code"><code>import arcpy
-import os
-import datetime
-import pandas as pd
+          arcpy.management.MakeFeatureLayer(
+              input_fc,
+              filtered_layer,
+              where_clause
+          )
 
-# --- Setup ---
-arcpy.env.overwriteOutput = True
+          arcpy.management.Dissolve(
+              filtered_layer,
+              output_fc,
+              ["STREET", "ROUTENUM", "CLASS"]
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">01</span>
+                  <h3>Filter and consolidate the road network</h3>
+                  <p>
+                    The workflow first removes road records that should not appear
+                    in the final roster. Road segments sharing the same street name,
+                    route number, and road class are then dissolved together so the
+                    output represents each roadway as a consolidated record.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  CODE EXAMPLE 02
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    RoadRosterGenerator.py — Calculate Road Mileage
+                  </div>
+                  <pre class="project-code"><code>arcpy.management.AddField(
+              output_fc,
+              "MILES",
+              "DOUBLE"
+          )
 
-# Temporary layer
-filtered_layer = "e911roads_filtered"
-where_clause = r"""
-STREET NOT IN ('UNNAMED ST', 'XOVER')
-AND CLASS NOT IN (98, 99)
-"""
-arcpy.management.MakeFeatureLayer(input_fc, filtered_layer, where_clause)
+          arcpy.management.CalculateField(
+              output_fc,
+              "MILES",
+              "!SHAPE.length@feet! / 5280",
+              expression_type="PYTHON3"
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">02</span>
+                  <h3>Calculate roadway mileage</h3>
+                  <p>
+                    A new mileage field is created for the consolidated roadway
+                    features. ArcPy calculates the spatial length of each road in
+                    feet and converts that measurement into miles for inclusion in
+                    the final roster.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  CODE EXAMPLE 03
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    RoadRosterGenerator.py — Determine Address Range
+                  </div>
+                  <pre class="project-code"><code>low_high_dict = {}
 
-# Dissolve
-arcpy.management.Dissolve(
-    in_features=filtered_layer,
-    out_feature_class=output_fc,
-    dissolve_field=["STREET", "ROUTENUM", "CLASS"],
-    multi_part="MULTI_PART"
-)
+          fields = [
+              "STREET", "ROUTENUM", "CLASS",
+              "LLO", "RLO", "LHI", "RHI"
+          ]
 
-# Add MILES field
-arcpy.management.AddField(output_fc, "MILES", "DOUBLE")
-arcpy.management.CalculateField(
-    output_fc,
-    "MILES",
-    "!SHAPE.length@feet! / 5280",
-    expression_type="PYTHON3"
-)
+          with arcpy.da.SearchCursor(
+              filtered_layer,
+              fields
+          ) as cursor:
 
-# Add LOW and HIGH fields
-arcpy.management.AddField(output_fc, "LOW", "LONG")
-arcpy.management.AddField(output_fc, "HIGH", "LONG")
+              for street, route, cls, llo, rlo, lhi, rhi in cursor:
 
-# Create lookup for LOW and HIGH from filtered_layer (read-only, does not change source)
-low_high_dict = {}
-fields = ["STREET", "ROUTENUM", "CLASS", "LLO", "RLO", "LHI", "RHI"]
+                  key = (street, route, cls)
 
-with arcpy.da.SearchCursor(filtered_layer, fields) as cursor:
-    for street, route, cls, llo, rlo, lhi, rhi in cursor:
-        key = (street, route, cls)
-        lows = [v for v in (llo, rlo) if v is not None]
-        highs = [v for v in (lhi, rhi) if v is not None]
-        if key not in low_high_dict:
-            low_high_dict[key] = {"low": [], "high": []}
-        low_high_dict[key]["low"].extend(lows)
-        low_high_dict[key]["high"].extend(highs)
+                  lows = [v for v in (llo, rlo) if v is not None]
+                  highs = [v for v in (lhi, rhi) if v is not None]</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">03</span>
+                  <h3>Determine roadway address ranges</h3>
+                  <p>
+                    The source road centerlines contain left- and right-side low
+                    and high address values. The script groups those values by
+                    roadway and determines the overall minimum and maximum addresses
+                    associated with each consolidated road record.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  CODE EXAMPLE 04
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    RoadRosterGenerator.py — Build the DataFrame
+                  </div>
+                  <pre class="project-code"><code>fields_for_df = [
+              f.name for f in arcpy.ListFields(output_fc)
+              if f.type not in ("OID", "Geometry")
+          ]
 
-# Update dissolved with LOW and HIGH
-with arcpy.da.UpdateCursor(output_fc, ["STREET", "ROUTENUM", "CLASS", "LOW", "HIGH"]) as cursor:
-    for row in cursor:
-        key = (row[0], row[1], row[2])
-        if key in low_high_dict:
-            lows = low_high_dict[key]["low"]
-            highs = low_high_dict[key]["high"]
-            row[3] = min(lows) if lows else None
-            row[4] = max(highs) if highs else None
-            cursor.updateRow(row)
+          data = []
 
-# --- Build DataFrame directly from dissolved FC (no CSV hop) ---
+          with arcpy.da.SearchCursor(
+              output_fc,
+              fields_for_df
+          ) as cursor:
 
-# Get all non-OID, non-geometry fields
-fields_for_df = [
-    f.name for f in arcpy.ListFields(output_fc)
-    if f.type not in ("OID", "Geometry")
-]
+              for row in cursor:
+                  data.append(row)
 
-data = []
-with arcpy.da.SearchCursor(output_fc, fields_for_df) as cursor:
-    for row in cursor:
-        data.append(row)
+          df = pd.DataFrame(
+              data,
+              columns=fields_for_df
+          )</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">04</span>
+                  <h3>Convert GIS records into tabular data</h3>
+                  <p>
+                    Once the spatial processing is complete, the required attributes
+                    are read directly from the feature class and loaded into a pandas
+                    DataFrame. This provides a clean tabular structure that can be
+                    formatted for the final Excel deliverable.
+                  </p>
+                </div>
+              </section>
+              <!-- =====================================================
+                  CODE EXAMPLE 05
+                  ===================================================== -->
+              <section class="code-walkthrough-item">
+                <div class="code-walkthrough-code">
+                  <div class="code-snippet-title">
+                    RoadRosterGenerator.py — Export & Clean Up
+                  </div>
+                  <pre class="project-code"><code>today_str = datetime.datetime.today().strftime("%Y%m%d")
 
-df = pd.DataFrame(data, columns=fields_for_df)
+          xlsx_filename = (
+              "Local Road Roster - {0}.xlsx"
+              .format(today_str)
+          )
 
-# Drop unwanted fields if they exist
-fields_to_drop = [col for col in ["OID_", "Shape_Length"] if col in df.columns]
-if fields_to_drop:
-    df.drop(columns=fields_to_drop, inplace=True)
+          xlsx_path = os.path.join(
+              output_folder,
+              xlsx_filename
+          )
 
-# Ensure MILES is a float and round to 3 decimal places
-if "MILES" in df.columns:
-    df["MILES"] = pd.to_numeric(df["MILES"], errors="coerce").round(3)
+          df.to_excel(
+              xlsx_path,
+              index=False
+          )
 
-# Create XLSX filename and write to Excel
-today_str = datetime.datetime.today().strftime("%Y%m%d")
-xlsx_filename = "Warren County Road Roster - {0}.xlsx".format(today_str)
-xlsx_path = os.path.join(output_folder, xlsx_filename)
-
-df.to_excel(xlsx_path, index=False)
-
-# Cleanup: delete temporary dissolved FC
-arcpy.management.Delete(output_fc)
-
-# Remove temporary layer from the map
-aprx = arcpy.mp.ArcGISProject("CURRENT")
-for m in aprx.listMaps():
-    for lyr in m.listLayers():
-        if lyr.name == filtered_layer:
-            m.removeLayer(lyr)
-            break
-
-print("Script completed successfully.")
-print("Excel file saved to:", xlsx_path)
-</code></pre>
-        </article>
+          arcpy.management.Delete(output_fc)</code></pre>
+                </div>
+                <div class="code-walkthrough-copy">
+                  <span class="code-walkthrough-number">05</span>
+                  <h3>Generate the final Road Roster</h3>
+                  <p>
+                    The processed DataFrame is exported to a date-stamped Excel
+                    workbook, creating a repeatable final product for distribution
+                    and reference. Temporary processing data is then removed to keep
+                    the GIS workspace clean.
+                  </p>
+                </div>
+              </section>
+            </div>
+          </article>
+          
         <article class="project-section">
-
             <div class="project-section-heading">
               <p class="section-kicker">PROJECT OUTPUT</p>
               <h2>Example Road Roster</h2>
             </div>
-
             <p>
               Example output produced by the Road Roster Generator.
               The workbook is generated directly from the authoritative
               road centerline dataset.
             </p>
-
             <div class="excel-preview">
-
               <table class="excel-preview-table">
-
                 <thead>
                   <tr>
                     <th>Street</th>

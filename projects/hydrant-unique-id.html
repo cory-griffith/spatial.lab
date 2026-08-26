@@ -98,68 +98,45 @@
             <p class="section-kicker">CODE WALKTHROUGH</p>
             <h2>How the Hydrant ID workflow works</h2>
           </div>
-
           <p class="code-walkthrough-intro">
             Selected portions of the script demonstrate how ArcPy accesses the
             hydrant dataset, prepares the required field, derives an identifier
             from stored coordinates, and updates each feature.
           </p>
-
-
           <div class="code-walkthrough">
-
-
             <!-- =====================================================
                 CODE EXAMPLE 01
                 ===================================================== -->
 
             <section class="code-walkthrough-item">
-
               <div class="code-walkthrough-code">
-
                 <div class="code-snippet-title">
                   Hydrants_UniqueIDs.py — Connect to GIS Data
                 </div>
-
                 <pre class="project-code"><code>import arcpy
 
         arcpy.env.workspace = r'Database Connections\...'
 
         layer_name = 'wcva.DBO.hydrant'</code></pre>
-
               </div>
-
-
               <div class="code-walkthrough-copy">
-
                 <span class="code-walkthrough-number">01</span>
-
                 <h3>Connect to the hydrant dataset</h3>
-
                 <p>
                   The script initializes ArcPy, connects to the enterprise GIS
                   workspace, and identifies the hydrant feature class that will
                   be processed.
                 </p>
-
               </div>
-
             </section>
-
-
-
             <!-- =====================================================
                 CODE EXAMPLE 02
                 ===================================================== -->
-
             <section class="code-walkthrough-item">
-
               <div class="code-walkthrough-code">
-
                 <div class="code-snippet-title">
                   Hydrants_UniqueIDs.py — Prepare the ID Field
                 </div>
-
                 <pre class="project-code"><code>if not arcpy.ListFields(
             layer_name,
             'Hydrant_ID'
@@ -171,40 +148,25 @@
                 'TEXT',
                 field_length=15
             )</code></pre>
-
               </div>
-
-
               <div class="code-walkthrough-copy">
-
                 <span class="code-walkthrough-number">02</span>
-
                 <h3>Prepare the output field</h3>
-
                 <p>
                   Before processing the records, the script checks whether the
                   Hydrant_ID field already exists. If it does not, ArcPy creates
                   a new text field capable of storing the generated identifier.
                 </p>
-
               </div>
-
             </section>
-
-
-
             <!-- =====================================================
                 CODE EXAMPLE 03
                 ===================================================== -->
-
             <section class="code-walkthrough-item">
-
               <div class="code-walkthrough-code">
-
                 <div class="code-snippet-title">
                   Hydrants_UniqueIDs.py — Read Coordinate Values
                 </div>
-
                 <pre class="project-code"><code>with arcpy.da.UpdateCursor(
             layer_name,
             ['Latitude', 'Longitude', 'Hydrant_ID']
@@ -216,41 +178,26 @@
                 lon_str = str(row[1])
 
                 if len(lat_str) &gt; 6 and len(lon_str) &gt; 7:</code></pre>
-
               </div>
-
-
               <div class="code-walkthrough-copy">
-
                 <span class="code-walkthrough-number">03</span>
-
                 <h3>Read each hydrant's location</h3>
-
                 <p>
                   An ArcPy UpdateCursor works through each hydrant record and
                   reads its Latitude, Longitude, and Hydrant_ID values. The
                   coordinates are converted to strings so individual coordinate
                   digits can be used when constructing the identifier.
                 </p>
-
               </div>
-
             </section>
-
-
-
             <!-- =====================================================
                 CODE EXAMPLE 04
                 ===================================================== -->
-
             <section class="code-walkthrough-item">
-
               <div class="code-walkthrough-code">
-
                 <div class="code-snippet-title">
                   Hydrants_UniqueIDs.py — Generate and Save the ID
                 </div>
-
                 <pre class="project-code"><code>unique_id = '{}{}{}{}-{}{}-{}{}{}{}-{}{}'.format(
             lat_str[1], lon_str[2],
             lat_str[2], lon_str[3],
@@ -265,30 +212,19 @@
 
         row[2] = unique_id
         cursor.updateRow(row)</code></pre>
-
               </div>
-
-
               <div class="code-walkthrough-copy">
-
                 <span class="code-walkthrough-number">04</span>
-
                 <h3>Generate and store the identifier</h3>
-
                 <p>
                   Selected digits from the latitude and longitude values are
                   combined into a consistent formatted identifier. The value is
                   limited to the designated field length, assigned to Hydrant_ID,
                   and written back to the hydrant feature.
                 </p>
-
               </div>
-
             </section>
-
-
           </div>
-
         </article>
 
         <article class="project-section">
